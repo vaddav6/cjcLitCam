@@ -6,15 +6,17 @@ from qtUi.uiQtMain import Ui_MainWindow
 from qtUi.uiQtBlack import Ui_Form
 
 import sys
+import os
 import cv2
 import numpy as np
 from ctypes import windll, c_int, byref
 
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QFileDialog, QMessageBox,
     QComboBox, QPushButton, QSlider, QLabel, QSizePolicy, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem
 )
 from PySide6 import QtCore
+# from PySide6.QtGui import QFileDialog
 from PySide6.QtCore import QTimer, Qt
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtMultimedia import QMediaDevices
@@ -122,6 +124,7 @@ class App(QMainWindow):
         self.is_streaming = False
         self.index = None
 
+        self.maskFileName = None
         self.mask = None
         self.maskMini = None
         self.maskAlign = None
@@ -148,6 +151,7 @@ class App(QMainWindow):
         self.ui.pB_stopCamera.clicked.connect(self.cam_stop_stream)
         self.ui.pB_startCamera.clicked.connect(self.cam_start_stream)
         self.ui.horizontalSlider.valueChanged.connect(self.main_zoom_changed)
+        self.ui.pushButton.clicked.connect(self.mask_select)
 
     def show_image(self):
         # pixmap = QPixmap("resor/rgbSq.png").toImage().mirrored(True, False)
@@ -164,6 +168,33 @@ class App(QMainWindow):
         self.index = idx
         self.capture = cv2.VideoCapture(self.index)
         print(idx)
+
+    def mask_select(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Выберите изображение",
+            "",
+            "Images (*.png)"
+        )
+
+        if file_path:
+            self.image_path = file_path
+            self.ui.label_3.setText(os.path.basename(file_path))
+
+            # Load and scale thumbnail
+            self.mask = QPixmap(file_path)
+            if not self.mask.isNull():
+                self.maskMini = self.mask.scaled(
+                    150, 225,
+                    Qt.KeepAspectRatioByExpanding,
+                    Qt.FastTransformation
+                )
+                self.ui.label_2.setPixmap(self.maskMini)
+            else:
+                QMessageBox.warning(self, "Ошибка", "Не удалось загрузить изображение")
+                self.ui.label_2.clear()
+                self.ui.label_3.setText("Файл не выбран")
+                self.image_path = ""
 
     def main_zoom_changed(self, scale):
         """Изменение масштаба через ползунок"""
