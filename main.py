@@ -1,6 +1,6 @@
 import sys
 
-from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtWidgets import QApplication, QMainWindow, QStyleFactory
 
 from qtUi.uiQtMain import Ui_MainWindow
 from qtUi.uiQtBlack import Ui_Form
@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QComboBox, QPushButton, QSlider, QLabel, QSizePolicy, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem
 )
+from PySide6 import QtCore
 from PySide6.QtCore import QTimer, Qt
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtMultimedia import QMediaDevices
@@ -24,8 +25,16 @@ class BlackScreen(QWidget):
 
     def setup_ui(self):
         self.setWindowTitle("Projection Window")
-        self.setStyleSheet("background-color: black;")
+        # self.setStyleSheet("background-color: black;")
+        # self.setStyleSheet("border: 5px solid red;")
+        # self.setStyle(QStyleFactory.create("Windows"))
+        # self.setStyle(QStyleFactory.create('fusion'))
+        # self.setStyleSheet("margin: 6px;")
+        # self.setStyleSheet("margin: 6px; border: 5px solid red;")
         self.setGeometry(0, 0, 1920, 1080)
+        self.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.FramelessWindowHint)
+        # self.setSpacing(0)
+        self.setContentsMargins(0, 0, 0, 0)
 
         self.image_label = QLabel(self)
         self.image_label.setAlignment(Qt.AlignCenter)
@@ -55,7 +64,7 @@ class BlackScreen(QWidget):
         #     Qt.IgnoreAspectRatio,
         #     Qt.FastTransformation
         # )
-        scaled_pixmap = self.original_pixmap.scaled(1920, 1080)
+        scaled_pixmap = self.original_pixmap.scaled(1920, 1080, Qt.IgnoreAspectRatio, Qt.FastTransformation)
         # print(widget_size)
         self.image_label.setPixmap(scaled_pixmap)
         # self.image_label.setPixmap(self.original_pixmap)
@@ -78,11 +87,16 @@ class App(QMainWindow):
         self.ui.setupUi(self)
 
         self.fullscreen_window = BlackScreen()
+        self.fullscreen_window.setStyleSheet("background-color: black;")
         self.fullscreen_window.showFullScreen()
 
         self.capture = None
         self.is_streaming = False
         self.index = None
+
+        self.mask = None
+        self.maskMini = None
+        self.maskAlign = None
 
         self.scene = QGraphicsScene()
         self.ui.graphicsView.setScene(self.scene)
