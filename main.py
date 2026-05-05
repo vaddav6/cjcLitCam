@@ -8,6 +8,8 @@ from qtUi.uiQtBlack import Ui_Form
 import sys
 import cv2
 import numpy as np
+from ctypes import windll, c_int, byref
+
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QComboBox, QPushButton, QSlider, QLabel, QSizePolicy, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem
@@ -17,11 +19,33 @@ from PySide6.QtCore import QTimer, Qt
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtMultimedia import QMediaDevices
 
+def disable_window_rounding(hwnd):
+    """Отключает скругление углов окна (только для Windows)."""
+    try:
+        DWMWA_WINDOW_CORNER_PREFERENCE = 33
+        DWMWCP_DONOTROUND = 1
+        windll.dwmapi.DwmSetWindowAttribute(
+            hwnd,
+            DWMWA_WINDOW_CORNER_PREFERENCE,
+            byref(c_int(DWMWCP_DONOTROUND)),
+            c_int(4)  # размер параметра
+        )
+    except Exception as e:
+        print(f"Не удалось отключить скругление: {e}")
+
 class BlackScreen(QWidget):
     def __init__(self):
         super().__init__()
+        self.setWindowFlags(Qt.FramelessWindowHint)
         self.setup_ui()
         self.original_pixmap = None
+
+    def showEvent(self, event):
+        """Событие показа окна: получаем HWND и отключаем скругление."""
+        super().showEvent(event)
+        if sys.platform == "win32":
+            hwnd = int(self.winId())  # получаем HWND окна
+            disable_window_rounding(hwnd)
 
     def setup_ui(self):
         self.setWindowTitle("Projection Window")
@@ -32,7 +56,9 @@ class BlackScreen(QWidget):
         # self.setStyleSheet("margin: 6px;")
         # self.setStyleSheet("margin: 6px; border: 5px solid red;")
         self.setGeometry(0, 0, 1920, 1080)
-        self.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.FramelessWindowHint)
+        # self.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.FramelessWindowHint)
+        # self.setWindowFlags(Qt.FramelessWindowHint)
+
         # self.setSpacing(0)
         self.setContentsMargins(0, 0, 0, 0)
 
@@ -82,13 +108,15 @@ class BlackScreen(QWidget):
 class App(QMainWindow):
     def __init__(self):
         super(App, self).__init__()
+        # self.setWindowFlags(Qt.FramelessWindowHint)
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
         self.fullscreen_window = BlackScreen()
         self.fullscreen_window.setStyleSheet("background-color: black;")
-        self.fullscreen_window.showFullScreen()
+        # self.fullscreen_window.showFullScreen()
+        self.fullscreen_window.show()
 
         self.capture = None
         self.is_streaming = False
