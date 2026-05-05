@@ -36,6 +36,15 @@ class App(QMainWindow):
         self.is_streaming = False
         self.index = None
 
+        self.display_time = 0
+        self.pause_time = 0
+        self.total_cycles = 0
+        self.remaining_cycles = 0
+        self.projection_cycle_active = False
+        self.timerLitho = QTimer()
+        self.timerLitho.timeout.connect(self.cycle_step)
+        self.current_state = None
+
         self.mask_filePath = None
         self.maskFileName = None
         self.mask = None
@@ -58,7 +67,7 @@ class App(QMainWindow):
 
         self.init_ui()
         # self.uiBlack.setupUi(self)
-        self.show_image()
+        # self.show_image()
 
     def init_ui(self):
         """Инициализация виджетов и компоновка"""
@@ -68,14 +77,93 @@ class App(QMainWindow):
         self.ui.horizontalSlider.valueChanged.connect(self.main_zoom_changed)
         self.ui.pushButton.clicked.connect(self.mask_select)
 
+        self.ui.pushButton_2.clicked.connect(self.start_projection)
+
+    def validate_inputs(self):
+        try:
+            display_time = int(self.ui.spinBox_2.text())
+            pause_time = int(self.ui.spinBox_3.text())
+            cycles = int(self.ui.spinBox_4.text())
+
+            # if display_time <= 0 or pause_time <= 0 or cycles <= 0:
+            if display_time <= 0 or cycles <= 0:
+                raise ValueError("Значения должны быть положительными")
+
+            return display_time, pause_time, cycles
+
+        except ValueError:
+            QMessageBox.warning(self, "Ошибка", "Пожалуйста, введите корректные числовые значения")
+            return None
+
+    def stop_controls(self):
+        self.ui.pushButton_2.setEnabled(False)
+        self.ui.pushButton_3.setEnabled(True)
+        self.ui.pushButton.setEnabled(False)
+
+    def reset_controls(self):
+        self.ui.pushButton_2.setEnabled(True)
+        self.ui.pushButton_3.setEnabled(False)
+        self.ui.pushButton.setEnabled(True)
+        self.projection_cycle_active = False
+
+    def start_projection(self):
+        if not self.mask_filePath:
+            QMessageBox.warning(self, "Ошибка", "Сначала выберите изображение")
+            return
+
+        inputs = self.validate_inputs()
+        if not inputs:
+            return
+
+        self.display_time, self.pause_time, self.total_cycles = inputs
+        self.remaining_cycles = self.total_cycles
+
+        self.projection_cycle_active = True
+        self.stop_controls()
+
+        # Start first cycle
+        self.show_image()
+        self.current_state = "display"
+        self.timerLitho.start(self.display_time)
+
+    def cycle_step(self):
+        self.timerLitho.stop()
+
+        if not self.projection_cycle_active:
+            return
+
+        if self.current_state == "display":
+            # Switch to pause
+            self.hide_image()
+            self.current_state = "pause"
+            self.timerLitho.start(self.pause_time)
+
+        elif self.current_state == "pause":
+            # Finish current cycle
+            self.remaining_cycles -= 1
+
+            if self.remaining_cycles > 0:
+                # Start next cycle
+                self.show_image()
+                self.current_state = "display"
+                self.timerLitho.start(self.display_time)
+            else:
+                # All cycles completed
+                self.fullscreen_window.clear()
+                self.reset_controls()
+
     def show_image(self):
         # pixmap = QPixmap("resor/rgbSq.png").toImage().mirrored(True, False)
-        pixmap = QPixmap("resor/rgbSq.png").toImage()
-        pixmap = QPixmap.fromImage(pixmap)
-        #pixmap = QPixmap(self.image_path)
+        # pixmap = QPixmap("resor/rgbSq.png").toImage()
+        # pixmap = QPixmap.fromImage(pixmap)
+        # pixmap = QPixmap(self.image_path)
+        pixmap = self.mask
 
         if not pixmap.isNull():
             self.fullscreen_window.show_image(pixmap)
+
+    def hide_image(self):
+        self.fullscreen_window.clear()
 
     def cam_select(self, idx):
         if idx < 0:
@@ -100,8 +188,8 @@ class App(QMainWindow):
             self.mask = QPixmap(file_path)
             if not self.mask.isNull():
                 self.maskMini = self.mask.scaled(
-                    150, 225,
-                    Qt.KeepAspectRatioByExpanding,
+                    250, 100,
+                    Qt.KeepAspectRatioByExpanding, # IgnoreAspectRatio
                     Qt.FastTransformation
                 )
                 self.ui.label_2.setPixmap(self.maskMini)
