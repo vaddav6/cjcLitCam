@@ -164,6 +164,11 @@ class App(QMainWindow):
                 self.show_image()
                 self.current_state = "display"
                 self.timerLitho.start(self.display_time)
+
+                total_time = self.total_cycles * (self.display_time + self.pause_time)
+                remaining_time = self.remaining_cycles * (self.display_time + self.pause_time)
+                self.pBVal = 100 - int((remaining_time / total_time) * 100)
+                self.ui.progressBar.setValue(self.pBVal)
             else:
                 # All cycles completed
                 self.fullscreen_window.clear()
