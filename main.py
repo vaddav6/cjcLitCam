@@ -95,6 +95,9 @@ class App(QMainWindow):
             if display_time <= 0 or cycles <= 0:
                 raise ValueError("Значения должны быть положительными")
 
+            self.pBTime = int((cycles * (display_time + pause_time))/(100/self.pBMinTik))
+            self.pBTimer.start(self.pBTime)
+
             return display_time, pause_time, cycles
 
         except ValueError:
