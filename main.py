@@ -49,7 +49,8 @@ class App(QMainWindow):
         self.maskFileName = None
         self.mask = None
         self.maskMini = None
-        self.maskAlign = None
+        self.maskAlign = QGraphicsPixmapItem()
+        self.maskAlignOrigin = None
 
         self.pBTimer = QTimer()
         self.pBTimer.timeout.connect(self.pb_change)
@@ -65,8 +66,11 @@ class App(QMainWindow):
 
         self.pixmap_item = QGraphicsPixmapItem()
         self.scene.addItem(self.pixmap_item)
+        self.scene.addItem(self.maskAlign)
         # self.update_frame()
         self.cam_list_update()
+        self.maskAlign.setZValue(1)
+        self.pixmap_item.setZValue(0)
 
         self.timer = QTimer()  # таймер для обновления кадров
         self.timer.timeout.connect(self.update_frame)
@@ -194,11 +198,41 @@ class App(QMainWindow):
         self.capture = cv2.VideoCapture(self.index)
         print(idx)
 
+    # def load_overlay(self, filepath):
+    def load_overlay(self, qpixmap):
+        """Загружает изображение оверлея (PNG, JPG), устанавливает прозрачность 50% и центрирует"""
+        # self.scene.clear()
+        # self.scene.addItem(self.pixmap_item)
+        self.ui.graphicsView.setBackgroundBrush(Qt.black)  # чёрный фон
+        pixmap = qpixmap
+        if pixmap.isNull():
+            print(f"Предупреждение: не удалось загрузить оверлей. Работаем без оверлея.")
+            self.maskAlign = None
+            return
+
+        self.maskAlignOrigin = pixmap
+        self.maskAlign = QGraphicsPixmapItem(pixmap)
+        self.maskAlign.setOpacity(0.5)   # 50% прозрачности
+        # self.scene.addItem(self.maskAlign)
+        # Z-порядок: оверлей поверх видео (чем выше число, тем выше)
+        # self.maskAlign.setZValue(1)
+        # self.pixmap_item.setZValue(0)
+
+    def update_overlay_position(self, video_width, video_height):
+        """Центрирует оверлей относительно текущего размера видео"""
+        if self.maskAlign is None:
+            return
+        ow = self.maskAlignOrigin.width()
+        oh = self.maskAlignOrigin.height()
+        x = (video_width - ow) // 2
+        y = (video_height - oh) // 2
+        self.maskAlign.setPos(x, y)
+
     def mask_select(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self,
             "Выберите изображение",
-            "",
+            "", # C:\Users\Daniil\YandexDisk-vad.varganov\Компьютер DESKTOP-09T6CET\univer\аспер\приборы проекты\литографПроектор-------------\шаблоны\калибровка 854
             "Images (*.png)"
         )
 
@@ -215,6 +249,8 @@ class App(QMainWindow):
                     Qt.FastTransformation
                 )
                 self.ui.label_2.setPixmap(self.maskMini)
+
+                self.load_overlay(self.mask)
             else:
                 QMessageBox.warning(self, "Ошибка", "Не удалось загрузить изображение")
                 self.ui.label_2.clear()
@@ -267,15 +303,22 @@ class App(QMainWindow):
                 h, w, ch = frame_rgb.shape
                 bytes_per_line = ch * w
                 qimage = QImage(frame_rgb.data, w, h, bytes_per_line, QImage.Format_RGB888)
+                qimage = qimage.mirrored(True, False)
                 # Создаём QPixmap из QImage
                 pixmap = QPixmap.fromImage(qimage)
+                # pixmap = QPixmap(self.image_path).toImage().mirrored(True, False)
+                # pixmap.mirrored(True, False)
                 self.current_pixmap = pixmap.copy()
                 # Обновляем сцену
                 self.pixmap_item.setPixmap(pixmap)
                 # Подгоняем размер сцены под pixmap, чтобы виды корректно работали
                 self.scene.setSceneRect(0, 0, pixmap.width(), pixmap.height())
 
-            self.ui.graphicsView.setScene(self.scene)
+                # Центрируем оверлей (если он есть)
+                if self.mask is not None:
+                    self.update_overlay_position(w, h)
+
+            # self.ui.graphicsView.setScene(self.scene)
 
 
 

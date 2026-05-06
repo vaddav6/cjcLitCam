@@ -15,16 +15,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QFormLayout, QFrame,
-    QGraphicsView, QHBoxLayout, QLabel, QMainWindow,
-    QProgressBar, QPushButton, QSizePolicy, QSlider,
-    QSpinBox, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFormLayout,
+    QFrame, QGraphicsView, QHBoxLayout, QLabel,
+    QMainWindow, QProgressBar, QPushButton, QSizePolicy,
+    QSlider, QSpinBox, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(640, 618)
+        MainWindow.resize(719, 684)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_2 = QVBoxLayout(self.centralwidget)
@@ -323,9 +323,90 @@ class Ui_MainWindow(object):
 
         self.progressBar = QProgressBar(self.frame_4)
         self.progressBar.setObjectName(u"progressBar")
-        self.progressBar.setValue(24)
+        self.progressBar.setValue(0)
 
         self.verticalLayout.addWidget(self.progressBar)
+
+        self.frame_3 = QFrame(self.frame_4)
+        self.frame_3.setObjectName(u"frame_3")
+        self.frame_3.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_3.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_4 = QVBoxLayout(self.frame_3)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.label_7 = QLabel(self.frame_3)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.verticalLayout_4.addWidget(self.label_7)
+
+        self.horizontalSlider_2 = QSlider(self.frame_3)
+        self.horizontalSlider_2.setObjectName(u"horizontalSlider_2")
+        self.horizontalSlider_2.setMinimum(50)
+        self.horizontalSlider_2.setMaximum(150)
+        self.horizontalSlider_2.setOrientation(Qt.Orientation.Horizontal)
+
+        self.verticalLayout_4.addWidget(self.horizontalSlider_2)
+
+        self.label_8 = QLabel(self.frame_3)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.verticalLayout_4.addWidget(self.label_8)
+
+        self.horizontalSlider_3 = QSlider(self.frame_3)
+        self.horizontalSlider_3.setObjectName(u"horizontalSlider_3")
+        self.horizontalSlider_3.setMaximum(100)
+        self.horizontalSlider_3.setOrientation(Qt.Orientation.Horizontal)
+
+        self.verticalLayout_4.addWidget(self.horizontalSlider_3)
+
+        self.frame_6 = QFrame(self.frame_3)
+        self.frame_6.setObjectName(u"frame_6")
+        self.frame_6.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_6.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_2 = QHBoxLayout(self.frame_6)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.label_9 = QLabel(self.frame_6)
+        self.label_9.setObjectName(u"label_9")
+
+        self.horizontalLayout_2.addWidget(self.label_9)
+
+        self.spinBox = QSpinBox(self.frame_6)
+        self.spinBox.setObjectName(u"spinBox")
+
+        self.horizontalLayout_2.addWidget(self.spinBox)
+
+
+        self.verticalLayout_4.addWidget(self.frame_6)
+
+        self.frame_7 = QFrame(self.frame_3)
+        self.frame_7.setObjectName(u"frame_7")
+        self.frame_7.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_7.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_3 = QHBoxLayout(self.frame_7)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.label_10 = QLabel(self.frame_7)
+        self.label_10.setObjectName(u"label_10")
+
+        self.horizontalLayout_3.addWidget(self.label_10)
+
+        self.spinBox_5 = QSpinBox(self.frame_7)
+        self.spinBox_5.setObjectName(u"spinBox_5")
+
+        self.horizontalLayout_3.addWidget(self.spinBox_5)
+
+
+        self.verticalLayout_4.addWidget(self.frame_7)
+
+        self.checkBox = QCheckBox(self.frame_3)
+        self.checkBox.setObjectName(u"checkBox")
+        self.checkBox.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.checkBox.setChecked(True)
+
+        self.verticalLayout_4.addWidget(self.checkBox)
+
+
+        self.verticalLayout.addWidget(self.frame_3)
 
 
         self.horizontalLayout.addWidget(self.frame_4)
@@ -362,5 +443,10 @@ class Ui_MainWindow(object):
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u0431\u0440\u0430\u0442\u044c \u0448\u0430\u0431\u043b\u043e\u043d", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u0448\u0430\u0431\u043b\u043e\u043d \u043d\u0435 \u0432\u044b\u0431\u0440\u0430\u043d", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"\u0438\u043c\u044f \u0448\u0430\u0431\u043b\u043e\u043d\u0430.png", None))
+        self.label_7.setText(QCoreApplication.translate("MainWindow", u"\u043c\u0430\u0441\u0448\u0442\u0430\u0431", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"\u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u044c", None))
+        self.label_9.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435 (V)", None))
+        self.label_10.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435 (H)", None))
+        self.checkBox.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0448\u0430\u0431\u043b\u043e\u043d", None))
     # retranslateUi
 
