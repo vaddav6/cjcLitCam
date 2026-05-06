@@ -51,6 +51,12 @@ class App(QMainWindow):
         self.maskMini = None
         self.maskAlign = None
 
+        self.pBTimer = QTimer()
+        self.pBTimer.timeout.connect(self.pb_change)
+        self.pBVal = 0
+        self.pBTime = None
+        self.pBMinTik = 1
+
         self.current_pixmap = None
 
         self.scene = QGraphicsScene()
