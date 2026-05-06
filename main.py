@@ -115,6 +115,14 @@ class App(QMainWindow):
         self.ui.pushButton.setEnabled(True)
         self.projection_cycle_active = False
 
+        self.pBVal = 0
+        self.ui.progressBar.setValue(self.pBVal)
+        self.pBTimer.stop()
+
+    def pb_change(self):
+        self.pBVal += self.pBMinTik
+        self.ui.progressBar.setValue(self.pBVal)
+
     def start_projection(self):
         if not self.mask_filePath:
             QMessageBox.warning(self, "Ошибка", "Сначала выберите изображение")
