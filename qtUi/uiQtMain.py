@@ -80,14 +80,24 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.frame_4 = QFrame(self.frame_2)
         self.frame_4.setObjectName(u"frame_4")
-        self.frame_4.setMaximumSize(QSize(275, 16777215))
+        self.frame_4.setMaximumSize(QSize(300, 16777215))
         self.frame_4.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame_4.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout = QVBoxLayout(self.frame_4)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.progressBar = QProgressBar(self.frame_4)
+        self.progressBar.setObjectName(u"progressBar")
+        self.progressBar.setMinimumSize(QSize(0, 0))
+        self.progressBar.setValue(0)
+        self.progressBar.setTextVisible(True)
+        self.progressBar.setTextDirection(QProgressBar.Direction.TopToBottom)
+
+        self.verticalLayout.addWidget(self.progressBar)
+
         self.frame_5 = QFrame(self.frame_4)
         self.frame_5.setObjectName(u"frame_5")
-        self.frame_5.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame_5.setEnabled(False)
+        self.frame_5.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame_5.setFrameShadow(QFrame.Shadow.Raised)
         self.formLayout_2 = QFormLayout(self.frame_5)
         self.formLayout_2.setObjectName(u"formLayout_2")
@@ -321,14 +331,9 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.label_3)
 
-        self.progressBar = QProgressBar(self.frame_4)
-        self.progressBar.setObjectName(u"progressBar")
-        self.progressBar.setValue(0)
-
-        self.verticalLayout.addWidget(self.progressBar)
-
         self.frame_3 = QFrame(self.frame_4)
         self.frame_3.setObjectName(u"frame_3")
+        self.frame_3.setEnabled(False)
         self.frame_3.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame_3.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_4 = QVBoxLayout(self.frame_3)
@@ -341,8 +346,8 @@ class Ui_MainWindow(object):
 
         self.horizontalSlider_2 = QSlider(self.frame_3)
         self.horizontalSlider_2.setObjectName(u"horizontalSlider_2")
-        self.horizontalSlider_2.setMinimum(50)
-        self.horizontalSlider_2.setMaximum(150)
+        self.horizontalSlider_2.setMinimum(40)
+        self.horizontalSlider_2.setMaximum(300)
         self.horizontalSlider_2.setOrientation(Qt.Orientation.Horizontal)
 
         self.verticalLayout_4.addWidget(self.horizontalSlider_2)
@@ -373,6 +378,8 @@ class Ui_MainWindow(object):
 
         self.spinBox = QSpinBox(self.frame_6)
         self.spinBox.setObjectName(u"spinBox")
+        self.spinBox.setMinimum(-2000)
+        self.spinBox.setMaximum(2000)
 
         self.horizontalLayout_2.addWidget(self.spinBox)
 
@@ -392,6 +399,8 @@ class Ui_MainWindow(object):
 
         self.spinBox_5 = QSpinBox(self.frame_7)
         self.spinBox_5.setObjectName(u"spinBox_5")
+        self.spinBox_5.setMinimum(-2000)
+        self.spinBox_5.setMaximum(2000)
 
         self.horizontalLayout_3.addWidget(self.spinBox_5)
 

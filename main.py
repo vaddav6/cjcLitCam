@@ -52,6 +52,17 @@ class App(QMainWindow):
         self.maskAlign = QGraphicsPixmapItem()
         self.maskAlignOrigin = None
 
+        self.maskAlignShift_v = None
+        self.maskAlignShift_h = None
+        self.maskAlignShow = None
+        self.maskAlignScale = None
+        self.maskAlignOpacity = 50
+
+        self.video_width = 3840
+        self.video_height = 2160
+        # self.video_width = 1080
+        # self.video_height = 1920
+
         self.pBTimer = QTimer()
         self.pBTimer.timeout.connect(self.pb_change)
         self.pBVal = 0
@@ -66,7 +77,7 @@ class App(QMainWindow):
 
         self.pixmap_item = QGraphicsPixmapItem()
         self.scene.addItem(self.pixmap_item)
-        self.scene.addItem(self.maskAlign)
+        # self.scene.addItem(self.maskAlign)
         # self.update_frame()
         self.cam_list_update()
         self.maskAlign.setZValue(1)
@@ -88,6 +99,48 @@ class App(QMainWindow):
         self.ui.pushButton.clicked.connect(self.mask_select)
 
         self.ui.pushButton_2.clicked.connect(self.start_projection)
+        self.ui.horizontalSlider_3.valueChanged.connect(self.change_mask_opacity)
+        self.ui.horizontalSlider_2.valueChanged.connect(self.change_mask_scale)
+        self.ui.checkBox.checkStateChanged.connect(self.change_mask_show)
+
+    def change_mask_show(self, state):
+        if self.ui.checkBox.isChecked():
+            self.maskAlign.setOpacity(self.ui.horizontalSlider_3.value() / 100)
+        else:
+            self.maskAlign.setOpacity(0)
+
+    def change_mask_opacity(self, opacity):
+        self.maskAlign.setOpacity(opacity/100)
+
+    def change_mask_scale(self, scale):
+        scale = float(scale)/100
+
+        print(self.maskAlignOrigin.width())
+        print(self.maskAlignOrigin.height())
+
+        w = int(float(self.maskAlignOrigin.width())*scale)
+        h = int(float(self.maskAlignOrigin.height())*scale)
+
+        pixmap = self.maskAlignOrigin.scaled(
+            w, h,
+            Qt.KeepAspectRatioByExpanding,  # IgnoreAspectRatio
+            Qt.FastTransformation
+        )
+
+        self.maskAlign.setPixmap(pixmap)
+
+        # scale_factor = scale / 100.0
+        # self.maskAlign.scale(scale_factor)
+
+        # self.mask = QPixmap(file_path)
+        # if not self.mask.isNull():
+        #     self.maskMini = self.mask.scaled(
+        #         250, 100,
+        #         Qt.KeepAspectRatioByExpanding,  # IgnoreAspectRatio
+        #         Qt.FastTransformation
+        #     )
+        #     self.ui.label_2.setPixmap(self.maskMini)
+
 
     def validate_inputs(self):
         try:
@@ -211,28 +264,49 @@ class App(QMainWindow):
             return
 
         self.maskAlignOrigin = pixmap
-        self.maskAlign = QGraphicsPixmapItem(pixmap)
+        # self.maskAlign = QGraphicsPixmapItem(pixmap)
+        # self.maskAlign.setPixmap(pixmap) todo
+        self.change_mask_scale(100)
+        self.ui.horizontalSlider_2.setValue(100)
         self.maskAlign.setOpacity(0.5)   # 50% прозрачности
-        # self.scene.addItem(self.maskAlign)
+        self.ui.horizontalSlider_3.setValue(50)
+
+
+        self.scene.addItem(self.maskAlign)
         # Z-порядок: оверлей поверх видео (чем выше число, тем выше)
         # self.maskAlign.setZValue(1)
         # self.pixmap_item.setZValue(0)
+
+        # начальная запись координат в комбобокс
+        self.start_mask_position()
 
     def update_overlay_position(self, video_width, video_height):
         """Центрирует оверлей относительно текущего размера видео"""
         if self.maskAlign is None:
             return
-        ow = self.maskAlignOrigin.width()
-        oh = self.maskAlignOrigin.height()
-        x = (video_width - ow) // 2
-        y = (video_height - oh) // 2
-        self.maskAlign.setPos(x, y)
+        # ow = self.maskAlignOrigin.width()
+        # oh = self.maskAlignOrigin.height()
+        # x = (video_width - ow) // 2
+        # y = (video_height - oh) // 2
+
+        # self.ui.horizontalSlider_2.valueChanged.connect(self.change_mask_scale)
+        scale_factor = self.ui.horizontalSlider_2.value() / 100.0
+
+        # x = self.ui.spinBox_5.value() * scale_factor
+        # y = self.ui.spinBox.value() * scale_factor
+
+        ow = self.maskAlignOrigin.width() * scale_factor
+        oh = self.maskAlignOrigin.height() * scale_factor
+        x = (self.ui.spinBox_5.value() - ow) // 2
+        y = (self.ui.spinBox.value() - oh) // 2
+        self.maskAlign.setPos(int(x), int(y))
+        return x, y
 
     def mask_select(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self,
             "Выберите изображение",
-            "", # C:\Users\Daniil\YandexDisk-vad.varganov\Компьютер DESKTOP-09T6CET\univer\аспер\приборы проекты\литографПроектор-------------\шаблоны\калибровка 854
+            "C:/Users/Daniil/YandexDisk-vad.varganov/Компьютер DESKTOP-09T6CET/univer/аспер/приборы проекты/литографПроектор-------------/шаблоны/калибровка 854", # C:\Users\Daniil\YandexDisk-vad.varganov\Компьютер DESKTOP-09T6CET\univer\аспер\приборы проекты\литографПроектор-------------\шаблоны\калибровка 854
             "Images (*.png)"
         )
 
@@ -251,11 +325,28 @@ class App(QMainWindow):
                 self.ui.label_2.setPixmap(self.maskMini)
 
                 self.load_overlay(self.mask)
+
+                self.ui.frame_5.setEnabled(True)
+                self.ui.frame_3.setEnabled(True)
             else:
                 QMessageBox.warning(self, "Ошибка", "Не удалось загрузить изображение")
                 self.ui.label_2.clear()
                 self.ui.label_3.setText("Файл не выбран")
                 self.mask_filePath = ""
+
+    def start_mask_position(self):
+        if self.maskAlign is None:
+            return
+        ow = self.maskAlignOrigin.width()
+        oh = self.maskAlignOrigin.height()
+        # x = (self.video_width - ow) // 2
+        # y = (self.video_height - oh) // 2
+
+        x = (self.video_width) // 2
+        y = (self.video_height) // 2
+
+        self.ui.spinBox.setValue(y)
+        self.ui.spinBox_5.setValue(x)
 
     def main_zoom_changed(self, scale):
         """Изменение масштаба через ползунок"""
@@ -312,11 +403,12 @@ class App(QMainWindow):
                 # Обновляем сцену
                 self.pixmap_item.setPixmap(pixmap)
                 # Подгоняем размер сцены под pixmap, чтобы виды корректно работали
-                self.scene.setSceneRect(0, 0, pixmap.width(), pixmap.height())
+                # self.scene.setSceneRect(0, 0, pixmap.width(), pixmap.height())
+                self.scene.setSceneRect(0, 0, self.video_width/2, self.video_height/2)
 
                 # Центрируем оверлей (если он есть)
                 if self.mask is not None:
-                    self.update_overlay_position(w, h)
+                    self.update_overlay_position(self.video_width, self.video_height)
 
             # self.ui.graphicsView.setScene(self.scene)
 

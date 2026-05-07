@@ -98,7 +98,7 @@
         <widget class="QFrame" name="frame_4">
          <property name="maximumSize">
           <size>
-           <width>275</width>
+           <width>300</width>
            <height>16777215</height>
           </size>
          </property>
@@ -110,9 +110,31 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
+           <widget class="QProgressBar" name="progressBar">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="textVisible">
+             <bool>true</bool>
+            </property>
+            <property name="textDirection">
+             <enum>QProgressBar::Direction::TopToBottom</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QFrame" name="frame_5">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="frameShape">
-             <enum>QFrame::Shape::NoFrame</enum>
+             <enum>QFrame::Shape::StyledPanel</enum>
             </property>
             <property name="frameShadow">
              <enum>QFrame::Shadow::Raised</enum>
@@ -1068,14 +1090,10 @@
            </widget>
           </item>
           <item>
-           <widget class="QProgressBar" name="progressBar">
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QFrame" name="frame_3">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="frameShape">
              <enum>QFrame::Shape::StyledPanel</enum>
             </property>
@@ -1096,10 +1114,10 @@
              <item>
               <widget class="QSlider" name="horizontalSlider_2">
                <property name="minimum">
-                <number>50</number>
+                <number>40</number>
                </property>
                <property name="maximum">
-                <number>150</number>
+                <number>300</number>
                </property>
                <property name="orientation">
                 <enum>Qt::Orientation::Horizontal</enum>
@@ -1143,7 +1161,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QSpinBox" name="spinBox"/>
+                 <widget class="QSpinBox" name="spinBox">
+                  <property name="minimum">
+                   <number>-2000</number>
+                  </property>
+                  <property name="maximum">
+                   <number>2000</number>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
@@ -1165,7 +1190,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QSpinBox" name="spinBox_5"/>
+                 <widget class="QSpinBox" name="spinBox_5">
+                  <property name="minimum">
+                   <number>-2000</number>
+                  </property>
+                  <property name="maximum">
+                   <number>2000</number>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
