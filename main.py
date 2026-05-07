@@ -265,7 +265,7 @@ class App(QMainWindow):
 
         self.maskAlignOrigin = pixmap
         # self.maskAlign = QGraphicsPixmapItem(pixmap)
-        # self.maskAlign.setPixmap(pixmap) todo
+        # self.maskAlign.setPixmap(pixmap)
         self.change_mask_scale(100)
         self.ui.horizontalSlider_2.setValue(100)
         self.maskAlign.setOpacity(0.5)   # 50% прозрачности
