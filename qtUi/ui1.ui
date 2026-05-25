@@ -78,7 +78,7 @@
        <enum>Qt::Orientation::Horizontal</enum>
       </property>
       <property name="tickPosition">
-       <enum>QSlider::TickPosition::TicksBothSides</enum>
+       <enum>QSlider::TickPosition::NoTicks</enum>
       </property>
       <property name="tickInterval">
        <number>10</number>
@@ -1210,8 +1210,14 @@
                <property name="text">
                 <string>показать шаблон</string>
                </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
                <property name="checked">
                 <bool>true</bool>
+               </property>
+               <property name="tristate">
+                <bool>false</bool>
                </property>
               </widget>
              </item>

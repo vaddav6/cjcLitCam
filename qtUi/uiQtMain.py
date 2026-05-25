@@ -67,7 +67,7 @@ class Ui_MainWindow(object):
         self.horizontalSlider.setPageStep(5)
         self.horizontalSlider.setSliderPosition(100)
         self.horizontalSlider.setOrientation(Qt.Orientation.Horizontal)
-        self.horizontalSlider.setTickPosition(QSlider.TickPosition.TicksBothSides)
+        self.horizontalSlider.setTickPosition(QSlider.TickPosition.NoTicks)
         self.horizontalSlider.setTickInterval(10)
 
         self.verticalLayout_2.addWidget(self.horizontalSlider)
@@ -410,7 +410,9 @@ class Ui_MainWindow(object):
         self.checkBox = QCheckBox(self.frame_3)
         self.checkBox.setObjectName(u"checkBox")
         self.checkBox.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.checkBox.setCheckable(True)
         self.checkBox.setChecked(True)
+        self.checkBox.setTristate(False)
 
         self.verticalLayout_4.addWidget(self.checkBox)
 

@@ -115,9 +115,6 @@ class App(QMainWindow):
     def change_mask_scale(self, scale):
         scale = float(scale)/100
 
-        print(self.maskAlignOrigin.width())
-        print(self.maskAlignOrigin.height())
-
         w = int(float(self.maskAlignOrigin.width())*scale)
         h = int(float(self.maskAlignOrigin.height())*scale)
 
@@ -394,7 +391,7 @@ class App(QMainWindow):
                 h, w, ch = frame_rgb.shape
                 bytes_per_line = ch * w
                 qimage = QImage(frame_rgb.data, w, h, bytes_per_line, QImage.Format_RGB888)
-                qimage = qimage.mirrored(True, False)
+                # qimage = qimage.mirrored(True, False) # отзеркаливание
                 # Создаём QPixmap из QImage
                 pixmap = QPixmap.fromImage(qimage)
                 # pixmap = QPixmap(self.image_path).toImage().mirrored(True, False)
