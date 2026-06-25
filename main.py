@@ -35,6 +35,18 @@ class App(QMainWindow):
         self.capture = None
         self.is_streaming = False
         self.index = None
+        self.mirrorH = False
+        self.mirrorV = False
+        self.video_width = 3840
+        self.video_height = 2160
+        # self.video_width = 1080
+        # self.video_height = 1920
+        self.timer = QTimer()  # таймер для обновления кадров
+        self.timer.timeout.connect(self.cam_update_frame)
+
+        self.scene = QGraphicsScene()
+        self.ui.graphicsView.setScene(self.scene)
+        self.ui.graphicsView.setBackgroundBrush(Qt.black)  # чёрный фон
 
         self.display_time = 0
         self.pause_time = 0
@@ -58,11 +70,6 @@ class App(QMainWindow):
         self.maskAlignScale = None
         self.maskAlignOpacity = 50
 
-        self.video_width = 3840
-        self.video_height = 2160
-        # self.video_width = 1080
-        # self.video_height = 1920
-
         self.pBTimer = QTimer()
         self.pBTimer.timeout.connect(self.pb_change)
         self.pBVal = 0
@@ -70,10 +77,6 @@ class App(QMainWindow):
         self.pBMinTik = 1
 
         self.current_pixmap = None
-
-        self.scene = QGraphicsScene()
-        self.ui.graphicsView.setScene(self.scene)
-        self.ui.graphicsView.setBackgroundBrush(Qt.black)  # чёрный фон
 
         self.pixmap_item = QGraphicsPixmapItem()
         self.scene.addItem(self.pixmap_item)
@@ -83,25 +86,141 @@ class App(QMainWindow):
         self.maskAlign.setZValue(1)
         self.pixmap_item.setZValue(0)
 
-        self.timer = QTimer()  # таймер для обновления кадров
-        self.timer.timeout.connect(self.update_frame)
-
         self.init_ui()
         # self.uiBlack.setupUi(self)
         # self.show_image()
 
     def init_ui(self):
         """Инициализация виджетов и компоновка"""
-        self.ui.comboBox.currentIndexChanged.connect(self.cam_select)
+        self.ui.cB_cameraName.currentIndexChanged.connect(self.cam_select)
         self.ui.pB_stopCamera.clicked.connect(self.cam_stop_stream)
         self.ui.pB_startCamera.clicked.connect(self.cam_start_stream)
-        self.ui.horizontalSlider.valueChanged.connect(self.main_zoom_changed)
+        self.ui.dSB_scaleCamera.valueChanged.connect(self.main_zoom_changed)
+        self.ui.chB_hMrirrorCamera.clicked.connect(self.cam_mirror_h)
+        self.ui.chB_vMrirrorCamera.clicked.connect(self.cam_mirror_v)
+        self.ui.pB_saveCamera.clicked.connect(self.cam_save_image)
+
         self.ui.pushButton.clicked.connect(self.mask_select)
 
         self.ui.pushButton_2.clicked.connect(self.start_projection)
-        self.ui.horizontalSlider_3.valueChanged.connect(self.change_mask_opacity)
-        self.ui.horizontalSlider_2.valueChanged.connect(self.change_mask_scale)
+        # self.ui.horizontalSlider_3.valueChanged.connect(self.change_mask_opacity)
+        # self.ui.horizontalSlider_2.valueChanged.connect(self.change_mask_scale)
+        self.ui.doubleSpinBox_2.valueChanged.connect(self.change_mask_opacity)
+        self.ui.doubleSpinBox.valueChanged.connect(self.change_mask_scale)
         self.ui.checkBox.checkStateChanged.connect(self.change_mask_show)
+
+    def cam_list_update(self):
+        """Получение списка всех видеоустройств"""
+        devices = QMediaDevices.videoInputs()
+        for device in devices:
+            self.ui.cB_cameraName.addItem(device.description())
+        if self.ui.cB_cameraName.count() == 0:
+            print("Не найдено ни одной USB-камеры")
+
+        if self.ui.cB_cameraName.count() > 0:
+            self.ui.cB_cameraName.setCurrentIndex(0)
+            self.cam_select(self.ui.cB_cameraName.currentIndex())
+            print(self.ui.cB_cameraName.currentIndex())
+
+    def cam_select(self, idx):
+        if idx < 0:
+            return
+
+        self.index = idx
+        self.capture = cv2.VideoCapture(self.index)
+        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 3840)
+        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 2160)
+
+        self.main_zoom_changed(self.ui.dSB_scaleCamera.value())
+
+
+    def cam_start_stream(self):
+        """Запуск трансляции (кадры читаются)"""
+        self.is_streaming = True
+        self.timer.start(30)
+
+    def cam_mirror_h(self, st):
+        """Изменение параметра зеркалирования изображения камеры по горизонтали"""
+        self.mirrorH = st
+
+    def cam_mirror_v(self, st):
+        """Изменение параметра зеркалирования изображения камеры по вертикали"""
+        self.mirrorV = st
+
+    def main_zoom_changed(self, scale):
+        """Изменение масштаба через ползунок"""
+        scale_factor = scale / 100.0
+            # self.zoom_label.setText(f"{scale_factor:.1f}x")
+        # Применяем масштаб к QGraphicsView (относительно текущего центра)
+        self.ui.graphicsView.resetTransform()
+        self.ui.graphicsView.scale(scale_factor, scale_factor)
+
+    def cam_save_image(self):
+        # 1. Захватываем кадр с камеры
+        cap = self.capture
+        ret, frame = cap.read()
+        cap.release()
+
+        if not ret:
+            QMessageBox.warning(self, "Ошибка", "Не удалось захватить кадр с камеры")
+            return
+
+        # 2. Открываем диалог сохранения файла
+        # Параметры: родитель, заголовок, начальная папка, фильтр типов файлов[reference:3]
+        file_path, selected_filter = QFileDialog.getSaveFileName(
+            self,
+            "Сохранить изображение",
+            "my_photo.png",  # имя файла по умолчанию
+            "Изображения (*.jpg *.jpeg *.png *.bmp);;Все файлы (*.*)"
+        )
+
+        # 3. Если пользователь выбрал файл (не нажал "Отмена")
+        if file_path:
+            # Сохраняем изображение через OpenCV
+            success = cv2.imwrite(file_path, frame)
+            if not success:
+                QMessageBox.warning(self, "Ошибка", "Не удалось сохранить файл")
+                # QMessageBox.information(self, "Успех", f"Изображение сохранено:\n{file_path}")
+            # else:
+            #     QMessageBox.warning(self, "Ошибка", "Не удалось сохранить файл")
+        else:
+            QMessageBox.information(self, "Отмена", "Сохранение отменено")
+
+    def cam_update_frame(self):
+        """Чтение кадра из камеры, наложение оверлея (уже на сцене) и отображение"""
+        # self.capture = cv2.VideoCapture(self.index)
+        if self.capture is not None:
+            ret, frame = self.capture.read()
+            if ret:
+                # Конвертируем BGR -> RGB
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                h, w, ch = frame_rgb.shape
+                bytes_per_line = ch * w
+                qimage = QImage(frame_rgb.data, w, h, bytes_per_line, QImage.Format_RGB888)
+                qimage = qimage.mirrored(self.mirrorH, self.mirrorV) # отзеркаливание
+                # Создаём QPixmap из QImage
+                pixmap = QPixmap.fromImage(qimage)
+                # pixmap = QPixmap(self.image_path).toImage().mirrored(True, False)
+                # pixmap.mirrored(True, False)
+                self.current_pixmap = pixmap.copy()
+                # Обновляем сцену
+                self.pixmap_item.setPixmap(pixmap)
+                # Подгоняем размер сцены под pixmap, чтобы виды корректно работали
+                # self.scene.setSceneRect(0, 0, pixmap.width(), pixmap.height())
+
+                # self.scene.setSceneRect(0, 0, self.video_width/2, self.video_height/2)
+                self.scene.setSceneRect(0, 0, 0, 0)
+
+                # Центрируем оверлей (если он есть)
+                if self.mask is not None:
+                    self.update_overlay_position(self.video_width, self.video_height)
+
+            # self.ui.graphicsView.setScene(self.scene)
+
+    def cam_stop_stream(self):
+        """Остановка трансляции (кадры не читаются)"""
+        self.is_streaming = False
+        self.timer.stop()
 
     def change_mask_show(self, state):
         if self.ui.checkBox.isChecked():
@@ -241,13 +360,6 @@ class App(QMainWindow):
     def hide_image(self):
         self.fullscreen_window.clear()
 
-    def cam_select(self, idx):
-        if idx < 0:
-            return
-        self.index = idx
-        self.capture = cv2.VideoCapture(self.index)
-        print(idx)
-
     # def load_overlay(self, filepath):
     def load_overlay(self, qpixmap):
         """Загружает изображение оверлея (PNG, JPG), устанавливает прозрачность 50% и центрирует"""
@@ -345,69 +457,9 @@ class App(QMainWindow):
         self.ui.spinBox.setValue(y)
         self.ui.spinBox_5.setValue(x)
 
-    def main_zoom_changed(self, scale):
-        """Изменение масштаба через ползунок"""
-        scale_factor = scale / 100.0
-            # self.zoom_label.setText(f"{scale_factor:.1f}x")
-        # Применяем масштаб к QGraphicsView (относительно текущего центра)
-        self.ui.graphicsView.resetTransform()
-        self.ui.graphicsView.scale(scale_factor, scale_factor)
-
-    def cam_list_update(self):
-        """Получение списка всех видеоустройств"""
-        devices = QMediaDevices.videoInputs()
-        for device in devices:
-            self.ui.comboBox.addItem(device.description())
-        if self.ui.comboBox.count() == 0:
-            print("Не найдено ни одной USB-камеры")
-
-        if self.ui.comboBox.count() > 0:
-            self.ui.comboBox.setCurrentIndex(0)
-            self.cam_select(self.ui.comboBox.currentIndex())
-            print(self.ui.comboBox.currentIndex())
-
-    def cam_start_stream(self):
-        """Остановка трансляции (кадры не читаются)"""
-        self.is_streaming = True
-        self.timer.start(30)
-
-    def cam_stop_stream(self):
-        """Остановка трансляции (кадры не читаются)"""
-        self.is_streaming = False
-        self.timer.stop()
-
     def closeEvent(self, event):
         self.fullscreen_window.close()
         event.accept()
-
-    def update_frame(self):
-        """Чтение кадра из камеры, наложение оверлея (уже на сцене) и отображение"""
-        # self.capture = cv2.VideoCapture(self.index)
-        if self.capture is not None:
-            ret, frame = self.capture.read()
-            if ret:
-                # Конвертируем BGR -> RGB
-                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                h, w, ch = frame_rgb.shape
-                bytes_per_line = ch * w
-                qimage = QImage(frame_rgb.data, w, h, bytes_per_line, QImage.Format_RGB888)
-                # qimage = qimage.mirrored(True, False) # отзеркаливание
-                # Создаём QPixmap из QImage
-                pixmap = QPixmap.fromImage(qimage)
-                # pixmap = QPixmap(self.image_path).toImage().mirrored(True, False)
-                # pixmap.mirrored(True, False)
-                self.current_pixmap = pixmap.copy()
-                # Обновляем сцену
-                self.pixmap_item.setPixmap(pixmap)
-                # Подгоняем размер сцены под pixmap, чтобы виды корректно работали
-                # self.scene.setSceneRect(0, 0, pixmap.width(), pixmap.height())
-                self.scene.setSceneRect(0, 0, self.video_width/2, self.video_height/2)
-
-                # Центрируем оверлей (если он есть)
-                if self.mask is not None:
-                    self.update_overlay_position(self.video_width, self.video_height)
-
-            # self.ui.graphicsView.setScene(self.scene)
 
 
 

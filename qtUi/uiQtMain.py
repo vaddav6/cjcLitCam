@@ -15,16 +15,17 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFormLayout,
-    QFrame, QGraphicsView, QHBoxLayout, QLabel,
-    QMainWindow, QProgressBar, QPushButton, QSizePolicy,
-    QSlider, QSpinBox, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox,
+    QFormLayout, QFrame, QGraphicsView, QHBoxLayout,
+    QLabel, QMainWindow, QProgressBar, QPushButton,
+    QSizePolicy, QSlider, QSpinBox, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(719, 684)
+        MainWindow.resize(1078, 908)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_2 = QVBoxLayout(self.centralwidget)
@@ -36,41 +37,28 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QFrame.Shadow.Raised)
         self.formLayout = QFormLayout(self.frame)
         self.formLayout.setObjectName(u"formLayout")
-        self.comboBox = QComboBox(self.frame)
-        self.comboBox.setObjectName(u"comboBox")
+        self.pB_stopCamera = QPushButton(self.frame)
+        self.pB_stopCamera.setObjectName(u"pB_stopCamera")
 
-        self.formLayout.setWidget(0, QFormLayout.ItemRole.FieldRole, self.comboBox)
+        self.formLayout.setWidget(1, QFormLayout.ItemRole.FieldRole, self.pB_stopCamera)
 
         self.pB_startCamera = QPushButton(self.frame)
         self.pB_startCamera.setObjectName(u"pB_startCamera")
 
         self.formLayout.setWidget(1, QFormLayout.ItemRole.LabelRole, self.pB_startCamera)
 
-        self.pB_stopCamera = QPushButton(self.frame)
-        self.pB_stopCamera.setObjectName(u"pB_stopCamera")
+        self.cB_cameraName = QComboBox(self.frame)
+        self.cB_cameraName.setObjectName(u"cB_cameraName")
 
-        self.formLayout.setWidget(1, QFormLayout.ItemRole.FieldRole, self.pB_stopCamera)
+        self.formLayout.setWidget(0, QFormLayout.ItemRole.FieldRole, self.cB_cameraName)
 
-        self.label = QLabel(self.frame)
-        self.label.setObjectName(u"label")
+        self.l_camera = QLabel(self.frame)
+        self.l_camera.setObjectName(u"l_camera")
 
-        self.formLayout.setWidget(0, QFormLayout.ItemRole.LabelRole, self.label)
+        self.formLayout.setWidget(0, QFormLayout.ItemRole.LabelRole, self.l_camera)
 
 
         self.verticalLayout_2.addWidget(self.frame)
-
-        self.horizontalSlider = QSlider(self.centralwidget)
-        self.horizontalSlider.setObjectName(u"horizontalSlider")
-        self.horizontalSlider.setMinimum(10)
-        self.horizontalSlider.setMaximum(400)
-        self.horizontalSlider.setSingleStep(5)
-        self.horizontalSlider.setPageStep(5)
-        self.horizontalSlider.setSliderPosition(100)
-        self.horizontalSlider.setOrientation(Qt.Orientation.Horizontal)
-        self.horizontalSlider.setTickPosition(QSlider.TickPosition.NoTicks)
-        self.horizontalSlider.setTickInterval(10)
-
-        self.verticalLayout_2.addWidget(self.horizontalSlider)
 
         self.frame_2 = QFrame(self.centralwidget)
         self.frame_2.setObjectName(u"frame_2")
@@ -85,14 +73,43 @@ class Ui_MainWindow(object):
         self.frame_4.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout = QVBoxLayout(self.frame_4)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.progressBar = QProgressBar(self.frame_4)
-        self.progressBar.setObjectName(u"progressBar")
-        self.progressBar.setMinimumSize(QSize(0, 0))
-        self.progressBar.setValue(0)
-        self.progressBar.setTextVisible(True)
-        self.progressBar.setTextDirection(QProgressBar.Direction.TopToBottom)
+        self.frame_8 = QFrame(self.frame_4)
+        self.frame_8.setObjectName(u"frame_8")
+        self.frame_8.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_8.setFrameShadow(QFrame.Shadow.Raised)
+        self.formLayout_5 = QFormLayout(self.frame_8)
+        self.formLayout_5.setObjectName(u"formLayout_5")
+        self.label_11 = QLabel(self.frame_8)
+        self.label_11.setObjectName(u"label_11")
 
-        self.verticalLayout.addWidget(self.progressBar)
+        self.formLayout_5.setWidget(0, QFormLayout.ItemRole.LabelRole, self.label_11)
+
+        self.dSB_scaleCamera = QDoubleSpinBox(self.frame_8)
+        self.dSB_scaleCamera.setObjectName(u"dSB_scaleCamera")
+        self.dSB_scaleCamera.setMinimum(10.000000000000000)
+        self.dSB_scaleCamera.setMaximum(500.000000000000000)
+        self.dSB_scaleCamera.setSingleStep(10.000000000000000)
+        self.dSB_scaleCamera.setValue(40.000000000000000)
+
+        self.formLayout_5.setWidget(0, QFormLayout.ItemRole.FieldRole, self.dSB_scaleCamera)
+
+        self.chB_vMrirrorCamera = QCheckBox(self.frame_8)
+        self.chB_vMrirrorCamera.setObjectName(u"chB_vMrirrorCamera")
+
+        self.formLayout_5.setWidget(1, QFormLayout.ItemRole.LabelRole, self.chB_vMrirrorCamera)
+
+        self.chB_hMrirrorCamera = QCheckBox(self.frame_8)
+        self.chB_hMrirrorCamera.setObjectName(u"chB_hMrirrorCamera")
+
+        self.formLayout_5.setWidget(1, QFormLayout.ItemRole.FieldRole, self.chB_hMrirrorCamera)
+
+        self.pB_saveCamera = QPushButton(self.frame_8)
+        self.pB_saveCamera.setObjectName(u"pB_saveCamera")
+
+        self.formLayout_5.setWidget(2, QFormLayout.ItemRole.SpanningRole, self.pB_saveCamera)
+
+
+        self.verticalLayout.addWidget(self.frame_8)
 
         self.frame_5 = QFrame(self.frame_4)
         self.frame_5.setObjectName(u"frame_5")
@@ -104,17 +121,17 @@ class Ui_MainWindow(object):
         self.label_4 = QLabel(self.frame_5)
         self.label_4.setObjectName(u"label_4")
 
-        self.formLayout_2.setWidget(1, QFormLayout.ItemRole.LabelRole, self.label_4)
+        self.formLayout_2.setWidget(5, QFormLayout.ItemRole.LabelRole, self.label_4)
 
         self.label_5 = QLabel(self.frame_5)
         self.label_5.setObjectName(u"label_5")
 
-        self.formLayout_2.setWidget(2, QFormLayout.ItemRole.LabelRole, self.label_5)
+        self.formLayout_2.setWidget(6, QFormLayout.ItemRole.LabelRole, self.label_5)
 
         self.label_6 = QLabel(self.frame_5)
         self.label_6.setObjectName(u"label_6")
 
-        self.formLayout_2.setWidget(3, QFormLayout.ItemRole.LabelRole, self.label_6)
+        self.formLayout_2.setWidget(7, QFormLayout.ItemRole.LabelRole, self.label_6)
 
         self.spinBox_2 = QSpinBox(self.frame_5)
         self.spinBox_2.setObjectName(u"spinBox_2")
@@ -122,7 +139,7 @@ class Ui_MainWindow(object):
         self.spinBox_2.setMaximum(100000)
         self.spinBox_2.setValue(1000)
 
-        self.formLayout_2.setWidget(1, QFormLayout.ItemRole.FieldRole, self.spinBox_2)
+        self.formLayout_2.setWidget(5, QFormLayout.ItemRole.FieldRole, self.spinBox_2)
 
         self.spinBox_3 = QSpinBox(self.frame_5)
         self.spinBox_3.setObjectName(u"spinBox_3")
@@ -130,7 +147,7 @@ class Ui_MainWindow(object):
         self.spinBox_3.setMaximum(100000)
         self.spinBox_3.setValue(0)
 
-        self.formLayout_2.setWidget(2, QFormLayout.ItemRole.FieldRole, self.spinBox_3)
+        self.formLayout_2.setWidget(6, QFormLayout.ItemRole.FieldRole, self.spinBox_3)
 
         self.spinBox_4 = QSpinBox(self.frame_5)
         self.spinBox_4.setObjectName(u"spinBox_4")
@@ -138,10 +155,16 @@ class Ui_MainWindow(object):
         self.spinBox_4.setMaximum(100)
         self.spinBox_4.setValue(1)
 
-        self.formLayout_2.setWidget(3, QFormLayout.ItemRole.FieldRole, self.spinBox_4)
+        self.formLayout_2.setWidget(7, QFormLayout.ItemRole.FieldRole, self.spinBox_4)
 
         self.pushButton_2 = QPushButton(self.frame_5)
         self.pushButton_2.setObjectName(u"pushButton_2")
+        self.pushButton_2.setEnabled(False)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pushButton_2.sizePolicy().hasHeightForWidth())
+        self.pushButton_2.setSizePolicy(sizePolicy)
         palette = QPalette()
         brush = QBrush(QColor(0, 0, 0, 255))
         brush.setStyle(Qt.BrushStyle.SolidPattern)
@@ -228,7 +251,7 @@ class Ui_MainWindow(object):
         self.pushButton_2.setAutoDefault(False)
         self.pushButton_2.setFlat(False)
 
-        self.formLayout_2.setWidget(0, QFormLayout.ItemRole.LabelRole, self.pushButton_2)
+        self.formLayout_2.setWidget(4, QFormLayout.ItemRole.LabelRole, self.pushButton_2)
 
         self.pushButton_3 = QPushButton(self.frame_5)
         self.pushButton_3.setObjectName(u"pushButton_3")
@@ -308,7 +331,28 @@ class Ui_MainWindow(object):
 #endif
         self.pushButton_3.setPalette(palette1)
 
-        self.formLayout_2.setWidget(0, QFormLayout.ItemRole.FieldRole, self.pushButton_3)
+        self.formLayout_2.setWidget(4, QFormLayout.ItemRole.FieldRole, self.pushButton_3)
+
+        self.progressBar = QProgressBar(self.frame_5)
+        self.progressBar.setObjectName(u"progressBar")
+        self.progressBar.setMinimumSize(QSize(0, 0))
+        self.progressBar.setValue(0)
+        self.progressBar.setTextVisible(True)
+        self.progressBar.setTextDirection(QProgressBar.Direction.TopToBottom)
+
+        self.formLayout_2.setWidget(1, QFormLayout.ItemRole.SpanningRole, self.progressBar)
+
+        self.label = QLabel(self.frame_5)
+        self.label.setObjectName(u"label")
+
+        self.formLayout_2.setWidget(8, QFormLayout.ItemRole.LabelRole, self.label)
+
+        self.spinBox_6 = QSpinBox(self.frame_5)
+        self.spinBox_6.setObjectName(u"spinBox_6")
+        self.spinBox_6.setMaximum(255)
+        self.spinBox_6.setValue(255)
+
+        self.formLayout_2.setWidget(8, QFormLayout.ItemRole.FieldRole, self.spinBox_6)
 
 
         self.verticalLayout.addWidget(self.frame_5)
@@ -318,19 +362,6 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.pushButton)
 
-        self.label_2 = QLabel(self.frame_4)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.verticalLayout.addWidget(self.label_2)
-
-        self.label_3 = QLabel(self.frame_4)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setMaximumSize(QSize(16777215, 20))
-        self.label_3.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.verticalLayout.addWidget(self.label_3)
-
         self.frame_3 = QFrame(self.frame_4)
         self.frame_3.setObjectName(u"frame_3")
         self.frame_3.setEnabled(False)
@@ -338,6 +369,19 @@ class Ui_MainWindow(object):
         self.frame_3.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_4 = QVBoxLayout(self.frame_3)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.label_3 = QLabel(self.frame_3)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setMaximumSize(QSize(16777215, 20))
+        self.label_3.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.verticalLayout_4.addWidget(self.label_3)
+
+        self.label_2 = QLabel(self.frame_3)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.verticalLayout_4.addWidget(self.label_2)
+
         self.label_7 = QLabel(self.frame_3)
         self.label_7.setObjectName(u"label_7")
         self.label_7.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -352,6 +396,12 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_4.addWidget(self.horizontalSlider_2)
 
+        self.doubleSpinBox = QDoubleSpinBox(self.frame_3)
+        self.doubleSpinBox.setObjectName(u"doubleSpinBox")
+        self.doubleSpinBox.setMaximum(200.000000000000000)
+
+        self.verticalLayout_4.addWidget(self.doubleSpinBox)
+
         self.label_8 = QLabel(self.frame_3)
         self.label_8.setObjectName(u"label_8")
         self.label_8.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -360,61 +410,74 @@ class Ui_MainWindow(object):
 
         self.horizontalSlider_3 = QSlider(self.frame_3)
         self.horizontalSlider_3.setObjectName(u"horizontalSlider_3")
+        self.horizontalSlider_3.setInputMethodHints(Qt.InputMethodHint.ImhNone)
         self.horizontalSlider_3.setMaximum(100)
         self.horizontalSlider_3.setOrientation(Qt.Orientation.Horizontal)
 
         self.verticalLayout_4.addWidget(self.horizontalSlider_3)
 
-        self.frame_6 = QFrame(self.frame_3)
-        self.frame_6.setObjectName(u"frame_6")
-        self.frame_6.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_6.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout_2 = QHBoxLayout(self.frame_6)
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_9 = QLabel(self.frame_6)
-        self.label_9.setObjectName(u"label_9")
+        self.doubleSpinBox_2 = QDoubleSpinBox(self.frame_3)
+        self.doubleSpinBox_2.setObjectName(u"doubleSpinBox_2")
+        self.doubleSpinBox_2.setMaximum(200.000000000000000)
 
-        self.horizontalLayout_2.addWidget(self.label_9)
+        self.verticalLayout_4.addWidget(self.doubleSpinBox_2)
 
-        self.spinBox = QSpinBox(self.frame_6)
-        self.spinBox.setObjectName(u"spinBox")
-        self.spinBox.setMinimum(-2000)
-        self.spinBox.setMaximum(2000)
-
-        self.horizontalLayout_2.addWidget(self.spinBox)
-
-
-        self.verticalLayout_4.addWidget(self.frame_6)
-
-        self.frame_7 = QFrame(self.frame_3)
-        self.frame_7.setObjectName(u"frame_7")
-        self.frame_7.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_7.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout_3 = QHBoxLayout(self.frame_7)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.label_10 = QLabel(self.frame_7)
-        self.label_10.setObjectName(u"label_10")
-
-        self.horizontalLayout_3.addWidget(self.label_10)
-
-        self.spinBox_5 = QSpinBox(self.frame_7)
-        self.spinBox_5.setObjectName(u"spinBox_5")
-        self.spinBox_5.setMinimum(-2000)
-        self.spinBox_5.setMaximum(2000)
-
-        self.horizontalLayout_3.addWidget(self.spinBox_5)
-
-
-        self.verticalLayout_4.addWidget(self.frame_7)
-
-        self.checkBox = QCheckBox(self.frame_3)
+        self.frame_9 = QFrame(self.frame_3)
+        self.frame_9.setObjectName(u"frame_9")
+        self.frame_9.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_9.setFrameShadow(QFrame.Shadow.Raised)
+        self.formLayout_6 = QFormLayout(self.frame_9)
+        self.formLayout_6.setObjectName(u"formLayout_6")
+        self.checkBox = QCheckBox(self.frame_9)
         self.checkBox.setObjectName(u"checkBox")
         self.checkBox.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.checkBox.setCheckable(True)
         self.checkBox.setChecked(True)
         self.checkBox.setTristate(False)
 
-        self.verticalLayout_4.addWidget(self.checkBox)
+        self.formLayout_6.setWidget(2, QFormLayout.ItemRole.LabelRole, self.checkBox)
+
+        self.checkBox_2 = QCheckBox(self.frame_9)
+        self.checkBox_2.setObjectName(u"checkBox_2")
+
+        self.formLayout_6.setWidget(2, QFormLayout.ItemRole.FieldRole, self.checkBox_2)
+
+        self.checkBox_4 = QCheckBox(self.frame_9)
+        self.checkBox_4.setObjectName(u"checkBox_4")
+
+        self.formLayout_6.setWidget(3, QFormLayout.ItemRole.LabelRole, self.checkBox_4)
+
+        self.checkBox_5 = QCheckBox(self.frame_9)
+        self.checkBox_5.setObjectName(u"checkBox_5")
+
+        self.formLayout_6.setWidget(3, QFormLayout.ItemRole.FieldRole, self.checkBox_5)
+
+        self.label_9 = QLabel(self.frame_9)
+        self.label_9.setObjectName(u"label_9")
+
+        self.formLayout_6.setWidget(0, QFormLayout.ItemRole.LabelRole, self.label_9)
+
+        self.spinBox = QSpinBox(self.frame_9)
+        self.spinBox.setObjectName(u"spinBox")
+        self.spinBox.setMinimum(-4000)
+        self.spinBox.setMaximum(4000)
+
+        self.formLayout_6.setWidget(0, QFormLayout.ItemRole.FieldRole, self.spinBox)
+
+        self.label_10 = QLabel(self.frame_9)
+        self.label_10.setObjectName(u"label_10")
+
+        self.formLayout_6.setWidget(1, QFormLayout.ItemRole.LabelRole, self.label_10)
+
+        self.spinBox_5 = QSpinBox(self.frame_9)
+        self.spinBox_5.setObjectName(u"spinBox_5")
+        self.spinBox_5.setMinimum(-4000)
+        self.spinBox_5.setMaximum(4000)
+
+        self.formLayout_6.setWidget(1, QFormLayout.ItemRole.FieldRole, self.spinBox_5)
+
+
+        self.verticalLayout_4.addWidget(self.frame_9)
 
 
         self.verticalLayout.addWidget(self.frame_3)
@@ -443,21 +506,34 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.pB_startCamera.setText(QCoreApplication.translate("MainWindow", u"\u25b6 \u0421\u0442\u0430\u0440\u0442", None))
         self.pB_stopCamera.setText(QCoreApplication.translate("MainWindow", u"\u23f8 \u0421\u0442\u043e\u043f", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"\u041a\u0430\u043c\u0435\u0440\u0430:", None))
+        self.pB_startCamera.setText(QCoreApplication.translate("MainWindow", u"\u25b6 \u0421\u0442\u0430\u0440\u0442", None))
+        self.l_camera.setText(QCoreApplication.translate("MainWindow", u"\u041a\u0430\u043c\u0435\u0440\u0430:", None))
+        self.label_11.setText(QCoreApplication.translate("MainWindow", u"\u041c\u0430\u0441\u0448\u0442\u0430\u0431:", None))
+        self.chB_vMrirrorCamera.setText(QCoreApplication.translate("MainWindow", u"\u043e\u0442\u0440\u0430\u0437\u0438\u0442\u044c\n"
+"\u0432\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u043e", None))
+        self.chB_hMrirrorCamera.setText(QCoreApplication.translate("MainWindow", u"\u043e\u0442\u0440\u0430\u0437\u0438\u0442\u044c\n"
+"\u0433\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u043e", None))
+        self.pB_saveCamera.setText(QCoreApplication.translate("MainWindow", u"\u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"\u0412\u0440\u0435\u043c\u044f \u0442\u0440\u0430\u043d\u0441\u043b\u044f\u0446\u0438\u0438 (\u043c\u0441):", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"\u0412\u0440\u0435\u043c\u044f \u043f\u0430\u0443\u0437\u044b (\u043c\u0441):", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u0446\u0438\u043a\u043b\u043e\u0432:", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"\u25b6 \u0421\u0442\u0430\u0440\u0442", None))
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"\u23f8 \u0421\u0442\u043e\u043f", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"\u042f\u0440\u043a\u043e\u0441\u0442\u044c:", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u0431\u0440\u0430\u0442\u044c \u0448\u0430\u0431\u043b\u043e\u043d", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u0448\u0430\u0431\u043b\u043e\u043d \u043d\u0435 \u0432\u044b\u0431\u0440\u0430\u043d", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"\u0438\u043c\u044f \u0448\u0430\u0431\u043b\u043e\u043d\u0430.png", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u0448\u0430\u0431\u043b\u043e\u043d \u043d\u0435 \u0432\u044b\u0431\u0440\u0430\u043d", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"\u043c\u0430\u0441\u0448\u0442\u0430\u0431", None))
         self.label_8.setText(QCoreApplication.translate("MainWindow", u"\u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u044c", None))
+        self.checkBox.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043a\u0430\u0437\u0430\u0442\u044c\n"
+"\u0448\u0430\u0431\u043b\u043e\u043d", None))
+        self.checkBox_2.setText(QCoreApplication.translate("MainWindow", u"\u0431\u0435\u0437 \u0440\u0430\u043c\u043a\u0438", None))
+        self.checkBox_4.setText(QCoreApplication.translate("MainWindow", u"\u043e\u0442\u0440\u0430\u0437\u0438\u0442\u044c\n"
+"\u0432\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u043e", None))
+        self.checkBox_5.setText(QCoreApplication.translate("MainWindow", u"\u043e\u0442\u0440\u0430\u0437\u0438\u0442\u044c\n"
+"\u0433\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u043e", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435 (V)", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435 (H)", None))
-        self.checkBox.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0448\u0430\u0431\u043b\u043e\u043d", None))
     # retranslateUi
 
