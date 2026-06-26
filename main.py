@@ -199,7 +199,8 @@ class App(QMainWindow):
                 qimage = QImage(frame_rgb.data, w, h, bytes_per_line, QImage.Format_RGB888)
                 qimage = qimage.mirrored(self.mirrorH, self.mirrorV) # отзеркаливание
                 # Создаём QPixmap из QImage
-                pixmap = QPixmap.fromImage(qimage)
+                # pixmap = QPixmap.fromImage(qimage)
+                pixmap = QPixmap("resor/photoMicroStruct_4k.jpg")
                 # pixmap = QPixmap(self.image_path).toImage().mirrored(True, False)
                 # pixmap.mirrored(True, False)
                 self.current_pixmap = pixmap.copy()
@@ -358,6 +359,21 @@ class App(QMainWindow):
     def hide_image(self):
         self.fullscreen_window.clear()
 
+    def mask_remove_black_pixels(self, pixmap):
+        # Convert to QImage
+        image = pixmap.toImage()
+        # If not already with alpha, convert to format with alpha
+        if image.format() != QImage.Format_ARGB32_Premultiplied and image.format() != QImage.Format_ARGB32:
+            image = image.convertToFormat(QImage.Format_ARGB32)
+        # Iterate pixels
+        for y in range(image.height()):
+            for x in range(image.width()):
+                color = image.pixelColor(x, y)
+                if color.red() == 0 and color.green() == 0 and color.blue() == 0:
+                    color.setAlpha(0)
+                    image.setPixelColor(x, y, color)
+        return QPixmap.fromImage(image)
+
     # def load_overlay(self, filepath):
     def load_overlay(self, qpixmap):
         """Загружает изображение оверлея (PNG, JPG), устанавливает прозрачность 50% и центрирует"""
@@ -377,6 +393,8 @@ class App(QMainWindow):
         self.ui.dSB_mask_scale.setValue(100)
         self.maskAlign.setOpacity(0.5)   # 50% прозрачности
         self.ui.dSB_mask_opacity.setValue(50)
+
+        self.maskAlignOrigin = self.mask_remove_black_pixels(self.maskAlignOrigin)
 
 
         self.scene.addItem(self.maskAlign)
@@ -404,9 +422,14 @@ class App(QMainWindow):
 
         ow = self.maskAlignOrigin.width() * scale_factor
         oh = self.maskAlignOrigin.height() * scale_factor
-        w = (self.ui.sB_mask_coord_W.value() - ow) // 2
-        h = (self.ui.sB_mask_coord_H.value() - oh) // 2
-        self.maskAlign.setPos(int(h), int(w))
+
+        # w = (self.ui.sB_mask_coord_W.value() - ow) // 2
+        # w = self.video_width - (ow // 2)
+        w = self.ui.sB_mask_coord_W.value() - (ow // 2)
+        # h = (self.ui.sB_mask_coord_H.value() - oh) // 2
+        # h = self.video_height - (oh // 2)
+        h = self.ui.sB_mask_coord_H.value() - (oh // 2)
+        self.maskAlign.setPos(int(w), int(h))
         # return x, y
 
     def mask_select(self):
@@ -448,8 +471,10 @@ class App(QMainWindow):
         # x = (self.video_width - ow) // 2
         # y = (self.video_height - oh) // 2
 
-        w = (self.video_width) // 2
-        h = (self.video_height) // 2
+        # w = (self.video_width - ow) // 2
+        # h = (self.video_height - oh) // 2
+        w = self.video_width // 2
+        h = self.video_height // 2
 
         self.ui.sB_mask_coord_W.setValue(w)
         self.ui.sB_mask_coord_H.setValue(h)
