@@ -18,8 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox,
     QFormLayout, QFrame, QGraphicsView, QHBoxLayout,
     QLabel, QMainWindow, QProgressBar, QPushButton,
-    QSizePolicy, QSlider, QSpinBox, QVBoxLayout,
-    QWidget)
+    QSizePolicy, QSpinBox, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -357,127 +356,102 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.frame_5)
 
-        self.pushButton = QPushButton(self.frame_4)
-        self.pushButton.setObjectName(u"pushButton")
+        self.pB_maskSelect = QPushButton(self.frame_4)
+        self.pB_maskSelect.setObjectName(u"pB_maskSelect")
 
-        self.verticalLayout.addWidget(self.pushButton)
+        self.verticalLayout.addWidget(self.pB_maskSelect)
 
         self.frame_3 = QFrame(self.frame_4)
         self.frame_3.setObjectName(u"frame_3")
         self.frame_3.setEnabled(False)
         self.frame_3.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame_3.setFrameShadow(QFrame.Shadow.Raised)
-        self.verticalLayout_4 = QVBoxLayout(self.frame_3)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.label_3 = QLabel(self.frame_3)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setMaximumSize(QSize(16777215, 20))
-        self.label_3.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.formLayout_7 = QFormLayout(self.frame_3)
+        self.formLayout_7.setObjectName(u"formLayout_7")
+        self.l_mask_name = QLabel(self.frame_3)
+        self.l_mask_name.setObjectName(u"l_mask_name")
+        self.l_mask_name.setMaximumSize(QSize(16777215, 20))
+        self.l_mask_name.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_4.addWidget(self.label_3)
+        self.formLayout_7.setWidget(0, QFormLayout.ItemRole.SpanningRole, self.l_mask_name)
 
-        self.label_2 = QLabel(self.frame_3)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.l_mask_mini = QLabel(self.frame_3)
+        self.l_mask_mini.setObjectName(u"l_mask_mini")
+        self.l_mask_mini.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_4.addWidget(self.label_2)
+        self.formLayout_7.setWidget(1, QFormLayout.ItemRole.SpanningRole, self.l_mask_mini)
 
-        self.label_7 = QLabel(self.frame_3)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.l_mask_scale = QLabel(self.frame_3)
+        self.l_mask_scale.setObjectName(u"l_mask_scale")
+        self.l_mask_scale.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_4.addWidget(self.label_7)
+        self.formLayout_7.setWidget(2, QFormLayout.ItemRole.LabelRole, self.l_mask_scale)
 
-        self.horizontalSlider_2 = QSlider(self.frame_3)
-        self.horizontalSlider_2.setObjectName(u"horizontalSlider_2")
-        self.horizontalSlider_2.setMinimum(40)
-        self.horizontalSlider_2.setMaximum(300)
-        self.horizontalSlider_2.setOrientation(Qt.Orientation.Horizontal)
+        self.dSB_mask_scale = QDoubleSpinBox(self.frame_3)
+        self.dSB_mask_scale.setObjectName(u"dSB_mask_scale")
+        self.dSB_mask_scale.setMaximum(200.000000000000000)
 
-        self.verticalLayout_4.addWidget(self.horizontalSlider_2)
+        self.formLayout_7.setWidget(2, QFormLayout.ItemRole.FieldRole, self.dSB_mask_scale)
 
-        self.doubleSpinBox = QDoubleSpinBox(self.frame_3)
-        self.doubleSpinBox.setObjectName(u"doubleSpinBox")
-        self.doubleSpinBox.setMaximum(200.000000000000000)
+        self.l_mask_opacity = QLabel(self.frame_3)
+        self.l_mask_opacity.setObjectName(u"l_mask_opacity")
+        self.l_mask_opacity.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout_4.addWidget(self.doubleSpinBox)
+        self.formLayout_7.setWidget(3, QFormLayout.ItemRole.LabelRole, self.l_mask_opacity)
 
-        self.label_8 = QLabel(self.frame_3)
-        self.label_8.setObjectName(u"label_8")
-        self.label_8.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.dSB_mask_opacity = QDoubleSpinBox(self.frame_3)
+        self.dSB_mask_opacity.setObjectName(u"dSB_mask_opacity")
+        self.dSB_mask_opacity.setMaximum(200.000000000000000)
 
-        self.verticalLayout_4.addWidget(self.label_8)
+        self.formLayout_7.setWidget(3, QFormLayout.ItemRole.FieldRole, self.dSB_mask_opacity)
 
-        self.horizontalSlider_3 = QSlider(self.frame_3)
-        self.horizontalSlider_3.setObjectName(u"horizontalSlider_3")
-        self.horizontalSlider_3.setInputMethodHints(Qt.InputMethodHint.ImhNone)
-        self.horizontalSlider_3.setMaximum(100)
-        self.horizontalSlider_3.setOrientation(Qt.Orientation.Horizontal)
+        self.l_mask_coord_W = QLabel(self.frame_3)
+        self.l_mask_coord_W.setObjectName(u"l_mask_coord_W")
 
-        self.verticalLayout_4.addWidget(self.horizontalSlider_3)
+        self.formLayout_7.setWidget(4, QFormLayout.ItemRole.LabelRole, self.l_mask_coord_W)
 
-        self.doubleSpinBox_2 = QDoubleSpinBox(self.frame_3)
-        self.doubleSpinBox_2.setObjectName(u"doubleSpinBox_2")
-        self.doubleSpinBox_2.setMaximum(200.000000000000000)
+        self.sB_mask_coord_W = QSpinBox(self.frame_3)
+        self.sB_mask_coord_W.setObjectName(u"sB_mask_coord_W")
+        self.sB_mask_coord_W.setMinimum(-4000)
+        self.sB_mask_coord_W.setMaximum(4000)
 
-        self.verticalLayout_4.addWidget(self.doubleSpinBox_2)
+        self.formLayout_7.setWidget(4, QFormLayout.ItemRole.FieldRole, self.sB_mask_coord_W)
 
-        self.frame_9 = QFrame(self.frame_3)
-        self.frame_9.setObjectName(u"frame_9")
-        self.frame_9.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_9.setFrameShadow(QFrame.Shadow.Raised)
-        self.formLayout_6 = QFormLayout(self.frame_9)
-        self.formLayout_6.setObjectName(u"formLayout_6")
-        self.checkBox = QCheckBox(self.frame_9)
-        self.checkBox.setObjectName(u"checkBox")
-        self.checkBox.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
-        self.checkBox.setCheckable(True)
-        self.checkBox.setChecked(True)
-        self.checkBox.setTristate(False)
+        self.l_mask_coord_H = QLabel(self.frame_3)
+        self.l_mask_coord_H.setObjectName(u"l_mask_coord_H")
 
-        self.formLayout_6.setWidget(2, QFormLayout.ItemRole.LabelRole, self.checkBox)
+        self.formLayout_7.setWidget(5, QFormLayout.ItemRole.LabelRole, self.l_mask_coord_H)
 
-        self.checkBox_2 = QCheckBox(self.frame_9)
-        self.checkBox_2.setObjectName(u"checkBox_2")
+        self.sB_mask_coord_H = QSpinBox(self.frame_3)
+        self.sB_mask_coord_H.setObjectName(u"sB_mask_coord_H")
+        self.sB_mask_coord_H.setMinimum(-4000)
+        self.sB_mask_coord_H.setMaximum(4000)
 
-        self.formLayout_6.setWidget(2, QFormLayout.ItemRole.FieldRole, self.checkBox_2)
+        self.formLayout_7.setWidget(5, QFormLayout.ItemRole.FieldRole, self.sB_mask_coord_H)
 
-        self.checkBox_4 = QCheckBox(self.frame_9)
-        self.checkBox_4.setObjectName(u"checkBox_4")
+        self.chB_mask_show = QCheckBox(self.frame_3)
+        self.chB_mask_show.setObjectName(u"chB_mask_show")
+        self.chB_mask_show.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.chB_mask_show.setCheckable(True)
+        self.chB_mask_show.setChecked(True)
+        self.chB_mask_show.setTristate(False)
 
-        self.formLayout_6.setWidget(3, QFormLayout.ItemRole.LabelRole, self.checkBox_4)
+        self.formLayout_7.setWidget(6, QFormLayout.ItemRole.LabelRole, self.chB_mask_show)
 
-        self.checkBox_5 = QCheckBox(self.frame_9)
-        self.checkBox_5.setObjectName(u"checkBox_5")
+        self.chB_mask_noFrame = QCheckBox(self.frame_3)
+        self.chB_mask_noFrame.setObjectName(u"chB_mask_noFrame")
 
-        self.formLayout_6.setWidget(3, QFormLayout.ItemRole.FieldRole, self.checkBox_5)
+        self.formLayout_7.setWidget(6, QFormLayout.ItemRole.FieldRole, self.chB_mask_noFrame)
 
-        self.label_9 = QLabel(self.frame_9)
-        self.label_9.setObjectName(u"label_9")
+        self.chB_mask_mirrorV = QCheckBox(self.frame_3)
+        self.chB_mask_mirrorV.setObjectName(u"chB_mask_mirrorV")
 
-        self.formLayout_6.setWidget(0, QFormLayout.ItemRole.LabelRole, self.label_9)
+        self.formLayout_7.setWidget(7, QFormLayout.ItemRole.LabelRole, self.chB_mask_mirrorV)
 
-        self.spinBox = QSpinBox(self.frame_9)
-        self.spinBox.setObjectName(u"spinBox")
-        self.spinBox.setMinimum(-4000)
-        self.spinBox.setMaximum(4000)
+        self.chB_mask_mirrorH = QCheckBox(self.frame_3)
+        self.chB_mask_mirrorH.setObjectName(u"chB_mask_mirrorH")
 
-        self.formLayout_6.setWidget(0, QFormLayout.ItemRole.FieldRole, self.spinBox)
-
-        self.label_10 = QLabel(self.frame_9)
-        self.label_10.setObjectName(u"label_10")
-
-        self.formLayout_6.setWidget(1, QFormLayout.ItemRole.LabelRole, self.label_10)
-
-        self.spinBox_5 = QSpinBox(self.frame_9)
-        self.spinBox_5.setObjectName(u"spinBox_5")
-        self.spinBox_5.setMinimum(-4000)
-        self.spinBox_5.setMaximum(4000)
-
-        self.formLayout_6.setWidget(1, QFormLayout.ItemRole.FieldRole, self.spinBox_5)
-
-
-        self.verticalLayout_4.addWidget(self.frame_9)
+        self.formLayout_7.setWidget(7, QFormLayout.ItemRole.FieldRole, self.chB_mask_mirrorH)
 
 
         self.verticalLayout.addWidget(self.frame_3)
@@ -521,19 +495,19 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"\u25b6 \u0421\u0442\u0430\u0440\u0442", None))
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"\u23f8 \u0421\u0442\u043e\u043f", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u042f\u0440\u043a\u043e\u0441\u0442\u044c:", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u0431\u0440\u0430\u0442\u044c \u0448\u0430\u0431\u043b\u043e\u043d", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"\u0438\u043c\u044f \u0448\u0430\u0431\u043b\u043e\u043d\u0430.png", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u0448\u0430\u0431\u043b\u043e\u043d \u043d\u0435 \u0432\u044b\u0431\u0440\u0430\u043d", None))
-        self.label_7.setText(QCoreApplication.translate("MainWindow", u"\u043c\u0430\u0441\u0448\u0442\u0430\u0431", None))
-        self.label_8.setText(QCoreApplication.translate("MainWindow", u"\u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u044c", None))
-        self.checkBox.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043a\u0430\u0437\u0430\u0442\u044c\n"
+        self.pB_maskSelect.setText(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u0431\u0440\u0430\u0442\u044c \u0448\u0430\u0431\u043b\u043e\u043d", None))
+        self.l_mask_name.setText(QCoreApplication.translate("MainWindow", u"\u0438\u043c\u044f \u0448\u0430\u0431\u043b\u043e\u043d\u0430.png", None))
+        self.l_mask_mini.setText(QCoreApplication.translate("MainWindow", u"\u0448\u0430\u0431\u043b\u043e\u043d \u043d\u0435 \u0432\u044b\u0431\u0440\u0430\u043d", None))
+        self.l_mask_scale.setText(QCoreApplication.translate("MainWindow", u"\u043c\u0430\u0441\u0448\u0442\u0430\u0431", None))
+        self.l_mask_opacity.setText(QCoreApplication.translate("MainWindow", u"\u043f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u044c", None))
+        self.l_mask_coord_W.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435 (W)", None))
+        self.l_mask_coord_H.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435 (H)", None))
+        self.chB_mask_show.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043a\u0430\u0437\u0430\u0442\u044c\n"
 "\u0448\u0430\u0431\u043b\u043e\u043d", None))
-        self.checkBox_2.setText(QCoreApplication.translate("MainWindow", u"\u0431\u0435\u0437 \u0440\u0430\u043c\u043a\u0438", None))
-        self.checkBox_4.setText(QCoreApplication.translate("MainWindow", u"\u043e\u0442\u0440\u0430\u0437\u0438\u0442\u044c\n"
+        self.chB_mask_noFrame.setText(QCoreApplication.translate("MainWindow", u"\u0431\u0435\u0437 \u0440\u0430\u043c\u043a\u0438", None))
+        self.chB_mask_mirrorV.setText(QCoreApplication.translate("MainWindow", u"\u043e\u0442\u0440\u0430\u0437\u0438\u0442\u044c\n"
 "\u0432\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u043e", None))
-        self.checkBox_5.setText(QCoreApplication.translate("MainWindow", u"\u043e\u0442\u0440\u0430\u0437\u0438\u0442\u044c\n"
+        self.chB_mask_mirrorH.setText(QCoreApplication.translate("MainWindow", u"\u043e\u0442\u0440\u0430\u0437\u0438\u0442\u044c\n"
 "\u0433\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u043e", None))
-        self.label_9.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435 (V)", None))
-        self.label_10.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435 (H)", None))
     # retranslateUi
 

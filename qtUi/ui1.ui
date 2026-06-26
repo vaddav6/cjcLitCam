@@ -1113,7 +1113,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="pB_maskSelect">
             <property name="text">
              <string>Выбрать шаблон</string>
             </property>
@@ -1130,9 +1130,9 @@
             <property name="frameShadow">
              <enum>QFrame::Shadow::Raised</enum>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_4">
-             <item>
-              <widget class="QLabel" name="label_3">
+            <layout class="QFormLayout" name="formLayout_7">
+             <item row="0" column="0" colspan="2">
+              <widget class="QLabel" name="l_mask_name">
                <property name="maximumSize">
                 <size>
                  <width>16777215</width>
@@ -1147,8 +1147,8 @@
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QLabel" name="label_2">
+             <item row="1" column="0" colspan="2">
+              <widget class="QLabel" name="l_mask_mini">
                <property name="text">
                 <string>шаблон не выбран</string>
                </property>
@@ -1157,8 +1157,8 @@
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QLabel" name="label_7">
+             <item row="2" column="0">
+              <widget class="QLabel" name="l_mask_scale">
                <property name="text">
                 <string>масштаб</string>
                </property>
@@ -1167,28 +1167,15 @@
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QSlider" name="horizontalSlider_2">
-               <property name="minimum">
-                <number>40</number>
-               </property>
-               <property name="maximum">
-                <number>300</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="doubleSpinBox">
+             <item row="2" column="1">
+              <widget class="QDoubleSpinBox" name="dSB_mask_scale">
                <property name="maximum">
                 <double>200.000000000000000</double>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QLabel" name="label_8">
+             <item row="3" column="0">
+              <widget class="QLabel" name="l_mask_opacity">
                <property name="text">
                 <string>прозрачность</string>
                </property>
@@ -1197,113 +1184,88 @@
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QSlider" name="horizontalSlider_3">
-               <property name="inputMethodHints">
-                <set>Qt::InputMethodHint::ImhNone</set>
-               </property>
-               <property name="maximum">
-                <number>100</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_2">
+             <item row="3" column="1">
+              <widget class="QDoubleSpinBox" name="dSB_mask_opacity">
                <property name="maximum">
                 <double>200.000000000000000</double>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QFrame" name="frame_9">
-               <property name="frameShape">
-                <enum>QFrame::Shape::StyledPanel</enum>
+             <item row="4" column="0">
+              <widget class="QLabel" name="l_mask_coord_W">
+               <property name="text">
+                <string>положение (W)</string>
                </property>
-               <property name="frameShadow">
-                <enum>QFrame::Shadow::Raised</enum>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QSpinBox" name="sB_mask_coord_W">
+               <property name="minimum">
+                <number>-4000</number>
                </property>
-               <layout class="QFormLayout" name="formLayout_6">
-                <item row="2" column="0">
-                 <widget class="QCheckBox" name="checkBox">
-                  <property name="layoutDirection">
-                   <enum>Qt::LayoutDirection::LeftToRight</enum>
-                  </property>
-                  <property name="text">
-                   <string>показать
+               <property name="maximum">
+                <number>4000</number>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="l_mask_coord_H">
+               <property name="text">
+                <string>положение (H)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="QSpinBox" name="sB_mask_coord_H">
+               <property name="minimum">
+                <number>-4000</number>
+               </property>
+               <property name="maximum">
+                <number>4000</number>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QCheckBox" name="chB_mask_show">
+               <property name="layoutDirection">
+                <enum>Qt::LayoutDirection::LeftToRight</enum>
+               </property>
+               <property name="text">
+                <string>показать
 шаблон</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                  <property name="tristate">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QCheckBox" name="checkBox_2">
-                  <property name="text">
-                   <string>без рамки</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QCheckBox" name="checkBox_4">
-                  <property name="text">
-                   <string>отразить
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+               <property name="tristate">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="QCheckBox" name="chB_mask_noFrame">
+               <property name="text">
+                <string>без рамки</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QCheckBox" name="chB_mask_mirrorV">
+               <property name="text">
+                <string>отразить
 вертикально</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QCheckBox" name="checkBox_5">
-                  <property name="text">
-                   <string>отразить
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="1">
+              <widget class="QCheckBox" name="chB_mask_mirrorH">
+               <property name="text">
+                <string>отразить
 горизонтально</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="label_9">
-                  <property name="text">
-                   <string>положение (V)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QSpinBox" name="spinBox">
-                  <property name="minimum">
-                   <number>-4000</number>
-                  </property>
-                  <property name="maximum">
-                   <number>4000</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_10">
-                  <property name="text">
-                   <string>положение (H)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QSpinBox" name="spinBox_5">
-                  <property name="minimum">
-                   <number>-4000</number>
-                  </property>
-                  <property name="maximum">
-                   <number>4000</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+               </property>
               </widget>
              </item>
             </layout>

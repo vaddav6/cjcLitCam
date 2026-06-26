@@ -100,14 +100,14 @@ class App(QMainWindow):
         self.ui.chB_vMrirrorCamera.clicked.connect(self.cam_mirror_v)
         self.ui.pB_saveCamera.clicked.connect(self.cam_save_image)
 
-        self.ui.pushButton.clicked.connect(self.mask_select)
+        self.ui.pB_maskSelect.clicked.connect(self.mask_select)
 
         self.ui.pushButton_2.clicked.connect(self.start_projection)
         # self.ui.horizontalSlider_3.valueChanged.connect(self.change_mask_opacity)
         # self.ui.horizontalSlider_2.valueChanged.connect(self.change_mask_scale)
-        self.ui.doubleSpinBox_2.valueChanged.connect(self.change_mask_opacity)
-        self.ui.doubleSpinBox.valueChanged.connect(self.change_mask_scale)
-        self.ui.checkBox.checkStateChanged.connect(self.change_mask_show)
+        self.ui.dSB_mask_opacity.valueChanged.connect(self.change_mask_opacity)
+        self.ui.dSB_mask_scale.valueChanged.connect(self.change_mask_scale)
+        self.ui.chB_mask_show.checkStateChanged.connect(self.change_mask_show)
 
     def cam_list_update(self):
         """Получение списка всех видеоустройств"""
@@ -223,8 +223,8 @@ class App(QMainWindow):
         self.timer.stop()
 
     def change_mask_show(self, state):
-        if self.ui.checkBox.isChecked():
-            self.maskAlign.setOpacity(self.ui.horizontalSlider_3.value() / 100)
+        if self.ui.chB_mask_show.isChecked():
+            self.maskAlign.setOpacity(self.ui.dSB_mask_opacity.value() / 100)
         else:
             self.maskAlign.setOpacity(0)
 
@@ -280,12 +280,10 @@ class App(QMainWindow):
     def stop_controls(self):
         self.ui.pushButton_2.setEnabled(False)
         self.ui.pushButton_3.setEnabled(True)
-        self.ui.pushButton.setEnabled(False)
 
     def reset_controls(self):
         self.ui.pushButton_2.setEnabled(True)
         self.ui.pushButton_3.setEnabled(False)
-        self.ui.pushButton.setEnabled(True)
         self.projection_cycle_active = False
 
         self.pBVal = 0
@@ -376,9 +374,9 @@ class App(QMainWindow):
         # self.maskAlign = QGraphicsPixmapItem(pixmap)
         # self.maskAlign.setPixmap(pixmap)
         self.change_mask_scale(100)
-        self.ui.horizontalSlider_2.setValue(100)
+        self.ui.dSB_mask_scale.setValue(100)
         self.maskAlign.setOpacity(0.5)   # 50% прозрачности
-        self.ui.horizontalSlider_3.setValue(50)
+        self.ui.dSB_mask_opacity.setValue(50)
 
 
         self.scene.addItem(self.maskAlign)
@@ -399,17 +397,17 @@ class App(QMainWindow):
         # y = (video_height - oh) // 2
 
         # self.ui.horizontalSlider_2.valueChanged.connect(self.change_mask_scale)
-        scale_factor = self.ui.horizontalSlider_2.value() / 100.0
+        scale_factor = self.ui.dSB_mask_scale.value() / 100.0
 
         # x = self.ui.spinBox_5.value() * scale_factor
         # y = self.ui.spinBox.value() * scale_factor
 
         ow = self.maskAlignOrigin.width() * scale_factor
         oh = self.maskAlignOrigin.height() * scale_factor
-        x = (self.ui.spinBox_5.value() - ow) // 2
-        y = (self.ui.spinBox.value() - oh) // 2
-        self.maskAlign.setPos(int(x), int(y))
-        return x, y
+        w = (self.ui.sB_mask_coord_W.value() - ow) // 2
+        h = (self.ui.sB_mask_coord_H.value() - oh) // 2
+        self.maskAlign.setPos(int(h), int(w))
+        # return x, y
 
     def mask_select(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -421,7 +419,7 @@ class App(QMainWindow):
 
         if file_path:
             self.mask_filePath = file_path
-            self.ui.label_3.setText(os.path.basename(file_path))
+            self.ui.l_mask_name.setText(os.path.basename(file_path))
 
             # Load and scale thumbnail
             self.mask = QPixmap(file_path)
@@ -431,16 +429,15 @@ class App(QMainWindow):
                     Qt.KeepAspectRatioByExpanding, # IgnoreAspectRatio
                     Qt.FastTransformation
                 )
-                self.ui.label_2.setPixmap(self.maskMini)
+                self.ui.l_mask_mini.setPixmap(self.maskMini)
 
                 self.load_overlay(self.mask)
 
-                self.ui.frame_5.setEnabled(True)
                 self.ui.frame_3.setEnabled(True)
             else:
                 QMessageBox.warning(self, "Ошибка", "Не удалось загрузить изображение")
-                self.ui.label_2.clear()
-                self.ui.label_3.setText("Файл не выбран")
+                self.ui.l_mask_mini.clear()
+                self.ui.l_mask_name.setText("Файл не выбран")
                 self.mask_filePath = ""
 
     def start_mask_position(self):
@@ -451,11 +448,11 @@ class App(QMainWindow):
         # x = (self.video_width - ow) // 2
         # y = (self.video_height - oh) // 2
 
-        x = (self.video_width) // 2
-        y = (self.video_height) // 2
+        w = (self.video_width) // 2
+        h = (self.video_height) // 2
 
-        self.ui.spinBox.setValue(y)
-        self.ui.spinBox_5.setValue(x)
+        self.ui.sB_mask_coord_W.setValue(w)
+        self.ui.sB_mask_coord_H.setValue(h)
 
     def closeEvent(self, event):
         self.fullscreen_window.close()
