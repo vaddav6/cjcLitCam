@@ -64,6 +64,11 @@ class App(QMainWindow):
         self.maskAlign = QGraphicsPixmapItem()
         self.maskAlignOrigin = None
 
+        self.align_mask = None
+        self.alignMaskOriginPixmap = None
+        self.alignMaskFormingPixmap = QGraphicsPixmapItem()
+        self.alignMaskFormingPixmap.setZValue(1)
+
         self.maskAlignShift_v = None
         self.maskAlignShift_h = None
         self.maskAlignShow = None
@@ -100,13 +105,18 @@ class App(QMainWindow):
         self.ui.chB_vMrirrorCamera.clicked.connect(self.cam_mirror_v)
         self.ui.pB_saveCamera.clicked.connect(self.cam_save_image)
 
-        self.ui.pB_maskSelect.clicked.connect(self.mask_select)
+        # self.ui.pB_maskSelect.clicked.connect(self.mask_select)
+        self.ui.pB_maskSelect.clicked.connect(self.align_mask_select)
+
+        # self.ui.dSB_mask_scale.valueChanged.connect(self.align_mask_scale)
+        self.ui.dSB_mask_scale.valueChanged.connect(self.align_mask_forming)
+        self.ui.dSB_mask_opacity.valueChanged.connect(self.align_mask_forming)
+
 
         self.ui.pushButton_2.clicked.connect(self.start_projection)
-        # self.ui.horizontalSlider_3.valueChanged.connect(self.change_mask_opacity)
-        # self.ui.horizontalSlider_2.valueChanged.connect(self.change_mask_scale)
-        self.ui.dSB_mask_opacity.valueChanged.connect(self.change_mask_opacity)
-        self.ui.dSB_mask_scale.valueChanged.connect(self.change_mask_scale)
+        # self.ui.dSB_mask_opacity.valueChanged.connect(self.change_mask_opacity)
+        # self.ui.dSB_mask_scale.valueChanged.connect(self.change_mask_scale)
+
         self.ui.chB_mask_show.checkStateChanged.connect(self.change_mask_show)
 
     def cam_list_update(self):
@@ -200,7 +210,7 @@ class App(QMainWindow):
                 qimage = qimage.mirrored(self.mirrorH, self.mirrorV) # отзеркаливание
                 # Создаём QPixmap из QImage
                 # pixmap = QPixmap.fromImage(qimage)
-                pixmap = QPixmap("resor/photoMicroStruct_4k.jpg")
+                pixmap = QPixmap("resor/photoMicroStruct_4k.jpg") # DEB img вместо камеры
                 # pixmap = QPixmap(self.image_path).toImage().mirrored(True, False)
                 # pixmap.mirrored(True, False)
                 self.current_pixmap = pixmap.copy()
@@ -212,9 +222,10 @@ class App(QMainWindow):
                 # self.scene.setSceneRect(0, 0, self.video_width/2, self.video_height/2)
                 self.scene.setSceneRect(0, 0, 0, 0)
 
-                # Центрируем оверлей (если он есть)
-                if self.mask is not None:
-                    self.update_overlay_position(self.video_width, self.video_height)
+                # размещаем маску совмещения (если она есть)
+                if self.align_mask is not None:
+                    self.align_update_mask_position()
+                    # self.update_overlay_position(self.video_width, self.video_height)
 
             # self.ui.graphicsView.setScene(self.scene)
 
@@ -223,16 +234,16 @@ class App(QMainWindow):
         self.is_streaming = False
         self.timer.stop()
 
-    def change_mask_show(self, state):
+    def change_mask_show(self, state): # DELL
         if self.ui.chB_mask_show.isChecked():
             self.maskAlign.setOpacity(self.ui.dSB_mask_opacity.value() / 100)
         else:
             self.maskAlign.setOpacity(0)
 
-    def change_mask_opacity(self, opacity):
+    def change_mask_opacity(self, opacity): # DELL
         self.maskAlign.setOpacity(opacity/100)
 
-    def change_mask_scale(self, scale):
+    def change_mask_scale(self, scale): # DELL
         scale = float(scale)/100
 
         w = int(float(self.maskAlignOrigin.width())*scale)
@@ -359,23 +370,7 @@ class App(QMainWindow):
     def hide_image(self):
         self.fullscreen_window.clear()
 
-    def mask_remove_black_pixels(self, pixmap):
-        # Convert to QImage
-        image = pixmap.toImage()
-        # If not already with alpha, convert to format with alpha
-        if image.format() != QImage.Format_ARGB32_Premultiplied and image.format() != QImage.Format_ARGB32:
-            image = image.convertToFormat(QImage.Format_ARGB32)
-        # Iterate pixels
-        for y in range(image.height()):
-            for x in range(image.width()):
-                color = image.pixelColor(x, y)
-                if color.red() == 0 and color.green() == 0 and color.blue() == 0:
-                    color.setAlpha(0)
-                    image.setPixelColor(x, y, color)
-        return QPixmap.fromImage(image)
-
-    # def load_overlay(self, filepath):
-    def load_overlay(self, qpixmap):
+    def load_overlay(self, qpixmap): # DELL
         """Загружает изображение оверлея (PNG, JPG), устанавливает прозрачность 50% и центрирует"""
         # self.scene.clear()
         # self.scene.addItem(self.pixmap_item)
@@ -394,7 +389,7 @@ class App(QMainWindow):
         self.maskAlign.setOpacity(0.5)   # 50% прозрачности
         self.ui.dSB_mask_opacity.setValue(50)
 
-        self.maskAlignOrigin = self.mask_remove_black_pixels(self.maskAlignOrigin)
+        # self.maskAlignOrigin = self.align_mask_remove_frame(self.maskAlignOrigin)
 
 
         self.scene.addItem(self.maskAlign)
@@ -404,6 +399,125 @@ class App(QMainWindow):
 
         # начальная запись координат в комбобокс
         self.start_mask_position()
+
+    def align_mask_remove_frame(self, pixmap):
+        # Convert to QImage
+        image = pixmap.toImage()
+        # If not already with alpha, convert to format with alpha
+        if image.format() != QImage.Format_ARGB32_Premultiplied and image.format() != QImage.Format_ARGB32:
+            image = image.convertToFormat(QImage.Format_ARGB32)
+        # Iterate pixels
+        for y in range(image.height()):
+            for x in range(image.width()):
+                color = image.pixelColor(x, y)
+                if color.red() == 0 and color.green() == 0 and color.blue() == 0:
+                    color.setAlpha(0)
+                    image.setPixelColor(x, y, color)
+        return QPixmap.fromImage(image)
+
+    def align_mask_scale(self):
+        scale = float(self.ui.dSB_mask_scale.value()) / 100
+
+        w = int(float(self.alignMaskOriginPixmap.width()) * scale)
+        h = int(float(self.alignMaskOriginPixmap.height()) * scale)
+
+        pixmap = self.alignMaskOriginPixmap.scaled(
+            w, h,
+            Qt.KeepAspectRatioByExpanding,  # IgnoreAspectRatio
+            Qt.FastTransformation
+        )
+
+        self.alignMaskFormingPixmap.setPixmap(pixmap)
+
+        # return pixmap
+
+    def align_mask_forming(self):
+        """преобразует отображение маски для выравнивания"""
+        self.align_mask_scale()
+        self.alignMaskFormingPixmap.setOpacity(self.ui.dSB_mask_opacity.value() / 100)
+
+    def align_load_mask(self, qpixmap): # DELL
+        """Загружает изображение оверлея (PNG, JPG), устанавливает прозрачность 50% и центрирует"""
+        self.ui.graphicsView.setBackgroundBrush(Qt.black)  # чёрный фон
+
+        if qpixmap.isNull():
+            print(f"Предупреждение: не удалось загрузить оверлей. Работаем без оверлея.")
+            self.alignMaskOriginPixmap = None
+            self.alignMaskFormingPixmap = None
+            return
+
+        self.alignMaskOriginPixmap = qpixmap
+
+        self.align_mask_forming()
+
+        # self.align_mask_scale(self.ui.dSB_mask_scale.value())
+        # self.alignMaskFormingPixmap.setOpacity(self.ui.dSB_mask_opacity.value() / 100)
+
+        self.scene.addItem(self.alignMaskFormingPixmap)
+
+        # начальная запись координат в комбобокс
+        self.align_start_mask_position()
+
+    def align_update_mask_position(self):
+        """Центрирует маску относительно текущего размера видео"""
+        if self.alignMaskFormingPixmap is None:
+            return
+
+        ow = self.alignMaskOriginPixmap.width()
+        oh = self.alignMaskOriginPixmap.height()
+
+        w = self.ui.sB_mask_coord_W.value() - (ow // 2)
+        h = self.ui.sB_mask_coord_H.value() - (oh // 2)
+
+        self.alignMaskFormingPixmap.setPos(int(w), int(h))
+
+    def align_mask_select(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Выберите изображение",
+            "C:/Users/Daniil/YandexDisk-vad.varganov/Компьютер DESKTOP-09T6CET/univer/аспер/приборы проекты/литографПроектор-------------/шаблоны/калибровка 854",
+            # C:\Users\Daniil\YandexDisk-vad.varganov\Компьютер DESKTOP-09T6CET\univer\аспер\приборы проекты\литографПроектор-------------\шаблоны\калибровка 854
+            "Images (*.png)"
+        )
+
+        if file_path:
+            self.mask_filePath = file_path
+            self.ui.l_mask_name.setText(os.path.basename(file_path))
+
+            # Load and scale thumbnail
+            self.align_mask = QPixmap(file_path)
+            if not self.align_mask.isNull():
+                self.maskMini = self.align_mask.scaled(
+                    250, 100,
+                    Qt.KeepAspectRatioByExpanding,  # IgnoreAspectRatio
+                    Qt.FastTransformation
+                )
+                self.ui.l_mask_mini.setPixmap(self.maskMini)
+
+                self.align_load_mask(self.align_mask)
+
+                self.ui.frame_3.setEnabled(True)
+            else:
+                QMessageBox.warning(self, "Ошибка", "Не удалось загрузить изображение")
+                self.ui.l_mask_mini.clear()
+                self.ui.l_mask_name.setText("Файл не выбран")
+                self.mask_filePath = ""
+
+    def align_start_mask_position(self):
+        if self.maskAlign is None:
+            return
+        ow = self.alignMaskOriginPixmap.width()
+        oh = self.alignMaskOriginPixmap.height()
+        # x = (self.video_width - ow) // 2
+        # y = (self.video_height - oh) // 2
+
+        # w = (self.video_width - ow) // 2
+        # h = (self.video_height - oh) // 2
+        w = self.video_width // 2
+        h = self.video_height // 2
+
+        self.ui.sB_mask_coord_W.setValue(w)
+        self.ui.sB_mask_coord_H.setValue(h)
 
     def update_overlay_position(self, video_width, video_height):
         """Центрирует оверлей относительно текущего размера видео"""
@@ -463,7 +577,7 @@ class App(QMainWindow):
                 self.ui.l_mask_name.setText("Файл не выбран")
                 self.mask_filePath = ""
 
-    def start_mask_position(self):
+    def start_mask_position(self): # DELL
         if self.maskAlign is None:
             return
         ow = self.maskAlignOrigin.width()

@@ -389,7 +389,8 @@ class Ui_MainWindow(object):
 
         self.dSB_mask_scale = QDoubleSpinBox(self.frame_3)
         self.dSB_mask_scale.setObjectName(u"dSB_mask_scale")
-        self.dSB_mask_scale.setMaximum(200.000000000000000)
+        self.dSB_mask_scale.setMaximum(600.000000000000000)
+        self.dSB_mask_scale.setValue(200.000000000000000)
 
         self.formLayout_7.setWidget(2, QFormLayout.ItemRole.FieldRole, self.dSB_mask_scale)
 
@@ -401,7 +402,8 @@ class Ui_MainWindow(object):
 
         self.dSB_mask_opacity = QDoubleSpinBox(self.frame_3)
         self.dSB_mask_opacity.setObjectName(u"dSB_mask_opacity")
-        self.dSB_mask_opacity.setMaximum(200.000000000000000)
+        self.dSB_mask_opacity.setMaximum(100.000000000000000)
+        self.dSB_mask_opacity.setValue(50.000000000000000)
 
         self.formLayout_7.setWidget(3, QFormLayout.ItemRole.FieldRole, self.dSB_mask_opacity)
 
