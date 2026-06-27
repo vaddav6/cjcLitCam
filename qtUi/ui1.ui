@@ -1132,7 +1132,7 @@
             </property>
             <layout class="QFormLayout" name="formLayout_7">
              <item row="0" column="0" colspan="2">
-              <widget class="QLabel" name="l_mask_name">
+              <widget class="QLabel" name="l_align_maskName">
                <property name="maximumSize">
                 <size>
                  <width>16777215</width>
@@ -1148,7 +1148,7 @@
               </widget>
              </item>
              <item row="1" column="0" colspan="2">
-              <widget class="QLabel" name="l_mask_mini">
+              <widget class="QLabel" name="l_align_maskMini">
                <property name="text">
                 <string>шаблон не выбран</string>
                </property>
@@ -1158,7 +1158,7 @@
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QLabel" name="l_mask_scale">
+              <widget class="QLabel" name="l_align_scale">
                <property name="text">
                 <string>масштаб</string>
                </property>
@@ -1168,7 +1168,7 @@
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QDoubleSpinBox" name="dSB_mask_scale">
+              <widget class="QDoubleSpinBox" name="dSB_align_scale">
                <property name="maximum">
                 <double>600.000000000000000</double>
                </property>
@@ -1178,7 +1178,7 @@
               </widget>
              </item>
              <item row="3" column="0">
-              <widget class="QLabel" name="l_mask_opacity">
+              <widget class="QLabel" name="l_align_opacity">
                <property name="text">
                 <string>прозрачность</string>
                </property>
@@ -1188,9 +1188,12 @@
               </widget>
              </item>
              <item row="3" column="1">
-              <widget class="QDoubleSpinBox" name="dSB_mask_opacity">
+              <widget class="QDoubleSpinBox" name="dSB_align_opacity">
                <property name="maximum">
                 <double>100.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>5.000000000000000</double>
                </property>
                <property name="value">
                 <double>50.000000000000000</double>
@@ -1198,41 +1201,47 @@
               </widget>
              </item>
              <item row="4" column="0">
-              <widget class="QLabel" name="l_mask_coord_W">
+              <widget class="QLabel" name="l_align_coord_W">
                <property name="text">
-                <string>положение (W)</string>
+                <string>положение (X)</string>
                </property>
               </widget>
              </item>
              <item row="4" column="1">
-              <widget class="QSpinBox" name="sB_mask_coord_W">
+              <widget class="QSpinBox" name="sB_align_coord_W">
                <property name="minimum">
                 <number>-4000</number>
                </property>
                <property name="maximum">
                 <number>4000</number>
+               </property>
+               <property name="value">
+                <number>1920</number>
                </property>
               </widget>
              </item>
              <item row="5" column="0">
-              <widget class="QLabel" name="l_mask_coord_H">
+              <widget class="QLabel" name="l_align_coord_H">
                <property name="text">
-                <string>положение (H)</string>
+                <string>положение (Y)</string>
                </property>
               </widget>
              </item>
              <item row="5" column="1">
-              <widget class="QSpinBox" name="sB_mask_coord_H">
+              <widget class="QSpinBox" name="sB_align_coord_H">
                <property name="minimum">
                 <number>-4000</number>
                </property>
                <property name="maximum">
                 <number>4000</number>
                </property>
+               <property name="value">
+                <number>1080</number>
+               </property>
               </widget>
              </item>
              <item row="6" column="0">
-              <widget class="QCheckBox" name="chB_mask_show">
+              <widget class="QCheckBox" name="chB_align_show">
                <property name="layoutDirection">
                 <enum>Qt::LayoutDirection::LeftToRight</enum>
                </property>
@@ -1252,7 +1261,7 @@
               </widget>
              </item>
              <item row="6" column="1">
-              <widget class="QCheckBox" name="chB_mask_noFrame">
+              <widget class="QCheckBox" name="chB_align_noFrame">
                <property name="text">
                 <string>без рамки</string>
                </property>
