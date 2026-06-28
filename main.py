@@ -61,7 +61,6 @@ class App(QMainWindow):
 
         self.mask_filePath = None
         self.maskFileName = None
-        self.mask = None
         self.maskMini = None
 
 
@@ -69,6 +68,8 @@ class App(QMainWindow):
         self.alignMaskOriginPixmap = None
         self.alignMaskFormingPixmap = QGraphicsPixmapItem()
         self.alignMaskFormingPixmap.setZValue(1)
+
+        self.lithoMask = None
 
         self.pBTimer = QTimer()
         self.pBTimer.timeout.connect(self.pb_change)
@@ -109,7 +110,7 @@ class App(QMainWindow):
         self.ui.chB_align_mirrorH.stateChanged.connect(self.align_mirror_h)
         self.ui.chB_align_mirrorV.stateChanged.connect(self.align_mirror_v)
 
-        self.ui.pushButton_2.clicked.connect(self.start_projection)
+        self.ui.litho_start_pB.clicked.connect(self.start_projection)
 
     def cam_list_update(self):
         """Получение списка всех видеоустройств"""
@@ -230,6 +231,12 @@ class App(QMainWindow):
 
             # Load and scale thumbnail
             self.align_mask = QPixmap(file_path)
+            # self.lithoMask = self.align_mask
+            l_mask = QPixmap(file_path)
+            l_mask = l_mask.toImage()
+            l_mask.flip(Qt.Horizontal)
+            self.lithoMask = QPixmap.fromImage(l_mask)
+
             if not self.align_mask.isNull():
                 self.maskMini = self.align_mask.scaled(
                     250, 100,
@@ -241,6 +248,8 @@ class App(QMainWindow):
                 self.align_load_mask(self.align_mask)
 
                 self.ui.frame_3.setEnabled(True)
+                self.ui.litho_frame.setEnabled(True)
+                self.ui.litho_start_pB.setEnabled(True)
             else:
                 QMessageBox.warning(self, "Ошибка", "Не удалось загрузить изображение")
                 self.ui.l_align_maskMini.clear()
@@ -327,7 +336,7 @@ class App(QMainWindow):
         al_image = self.alignMaskOriginPixmap.toImage()
 
         if self.ui.chB_align_mirrorH.isChecked():
-            al_image. flip(Qt.Horizontal)
+            al_image.flip(Qt.Horizontal)
         else:
             al_image.flip(Qt.Horizontal)
 
@@ -350,9 +359,9 @@ class App(QMainWindow):
 
     def validate_inputs(self):
         try:
-            display_time = int(self.ui.spinBox_2.text())
-            pause_time = int(self.ui.spinBox_3.text())
-            cycles = int(self.ui.spinBox_4.text())
+            display_time = int(self.ui.litho_showTime_sB.text())
+            pause_time = int(self.ui.litho_pauseTime_sB.text())
+            cycles = int(self.ui.litho_cycles_sB.text())
 
             # if display_time <= 0 or pause_time <= 0 or cycles <= 0:
             if display_time <= 0 or cycles <= 0:
@@ -368,21 +377,21 @@ class App(QMainWindow):
             return None
 
     def stop_controls(self):
-        self.ui.pushButton_2.setEnabled(False)
-        self.ui.pushButton_3.setEnabled(True)
+        self.ui.litho_start_pB.setEnabled(False)
+        self.ui.litho_stop_pB.setEnabled(True)
 
     def reset_controls(self):
-        self.ui.pushButton_2.setEnabled(True)
-        self.ui.pushButton_3.setEnabled(False)
+        self.ui.litho_start_pB.setEnabled(True)
+        self.ui.litho_stop_pB.setEnabled(False)
         self.projection_cycle_active = False
 
         self.pBVal = 0
-        self.ui.progressBar.setValue(self.pBVal)
+        self.ui.litho_progress_prBar.setValue(self.pBVal)
         self.pBTimer.stop()
 
     def pb_change(self):
         self.pBVal += self.pBMinTik
-        self.ui.progressBar.setValue(self.pBVal)
+        self.ui.litho_progress_prBar.setValue(self.pBVal)
 
     def start_projection(self):
         if not self.mask_filePath:
@@ -429,7 +438,7 @@ class App(QMainWindow):
                 total_time = self.total_cycles * (self.display_time + self.pause_time)
                 remaining_time = self.remaining_cycles * (self.display_time + self.pause_time)
                 self.pBVal = 100 - int((remaining_time / total_time) * 100)
-                self.ui.progressBar.setValue(self.pBVal)
+                self.ui.litho_progress_prBar.setValue(self.pBVal)
             else:
                 # All cycles completed
                 self.fullscreen_window.clear()
@@ -440,7 +449,9 @@ class App(QMainWindow):
         # pixmap = QPixmap("resor/rgbSq.png").toImage()
         # pixmap = QPixmap.fromImage(pixmap)
         # pixmap = QPixmap(self.image_path)
-        pixmap = self.mask
+
+        # pixmap = self.align_mask
+        pixmap = self.lithoMask
 
         if not pixmap.isNull():
             self.fullscreen_window.show_image(pixmap)

@@ -16,48 +16,6 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QFrame" name="frame">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>300</height>
-       </size>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
-      </property>
-      <layout class="QFormLayout" name="formLayout">
-       <item row="1" column="1">
-        <widget class="QPushButton" name="pB_stopCamera">
-         <property name="text">
-          <string>⏸ Стоп</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="pB_startCamera">
-         <property name="text">
-          <string>▶ Старт</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="cB_cameraName"/>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="l_camera">
-         <property name="text">
-          <string>Камера:</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
      <widget class="QFrame" name="frame_2">
       <property name="frameShape">
        <enum>QFrame::Shape::StyledPanel</enum>
@@ -81,6 +39,48 @@
           <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QFrame" name="frame">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>300</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <layout class="QFormLayout" name="formLayout">
+             <item row="1" column="1">
+              <widget class="QPushButton" name="pB_stopCamera">
+               <property name="text">
+                <string>⏸ Стоп</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QPushButton" name="pB_startCamera">
+               <property name="text">
+                <string>▶ Старт</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QComboBox" name="cB_cameraName"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="l_camera">
+               <property name="text">
+                <string>Камера:</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
           <item>
            <widget class="QFrame" name="frame_8">
             <property name="frameShape">
@@ -140,7 +140,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QFrame" name="frame_5">
+           <widget class="QFrame" name="litho_frame">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -152,28 +152,28 @@
             </property>
             <layout class="QFormLayout" name="formLayout_2">
              <item row="5" column="0">
-              <widget class="QLabel" name="label_4">
+              <widget class="QLabel" name="litho_showTime_l">
                <property name="text">
                 <string>Время трансляции (мс):</string>
                </property>
               </widget>
              </item>
              <item row="6" column="0">
-              <widget class="QLabel" name="label_5">
+              <widget class="QLabel" name="litho_pauseTime_l">
                <property name="text">
                 <string>Время паузы (мс):</string>
                </property>
               </widget>
              </item>
              <item row="7" column="0">
-              <widget class="QLabel" name="label_6">
+              <widget class="QLabel" name="litho_cycles_l">
                <property name="text">
                 <string>Количество циклов:</string>
                </property>
               </widget>
              </item>
              <item row="5" column="1">
-              <widget class="QSpinBox" name="spinBox_2">
+              <widget class="QSpinBox" name="litho_showTime_sB">
                <property name="minimum">
                 <number>1</number>
                </property>
@@ -186,7 +186,7 @@
               </widget>
              </item>
              <item row="6" column="1">
-              <widget class="QSpinBox" name="spinBox_3">
+              <widget class="QSpinBox" name="litho_pauseTime_sB">
                <property name="minimum">
                 <number>0</number>
                </property>
@@ -199,7 +199,7 @@
               </widget>
              </item>
              <item row="7" column="1">
-              <widget class="QSpinBox" name="spinBox_4">
+              <widget class="QSpinBox" name="litho_cycles_sB">
                <property name="minimum">
                 <number>1</number>
                </property>
@@ -212,7 +212,7 @@
               </widget>
              </item>
              <item row="4" column="0">
-              <widget class="QPushButton" name="pushButton_2">
+              <widget class="QPushButton" name="litho_start_pB">
                <property name="enabled">
                 <bool>false</bool>
                </property>
@@ -652,7 +652,7 @@
               </widget>
              </item>
              <item row="4" column="1">
-              <widget class="QPushButton" name="pushButton_3">
+              <widget class="QPushButton" name="litho_stop_pB">
                <property name="palette">
                 <palette>
                  <active>
@@ -1074,7 +1074,7 @@
               </widget>
              </item>
              <item row="1" column="0" colspan="2">
-              <widget class="QProgressBar" name="progressBar">
+              <widget class="QProgressBar" name="litho_progress_prBar">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -1093,14 +1093,14 @@
               </widget>
              </item>
              <item row="8" column="0">
-              <widget class="QLabel" name="label">
+              <widget class="QLabel" name="litho_bright_l">
                <property name="text">
                 <string>Яркость:</string>
                </property>
               </widget>
              </item>
              <item row="8" column="1">
-              <widget class="QSpinBox" name="spinBox_6">
+              <widget class="QSpinBox" name="litho_bright_sB">
                <property name="maximum">
                 <number>255</number>
                </property>
