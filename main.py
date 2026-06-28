@@ -106,6 +106,8 @@ class App(QMainWindow):
         self.ui.sB_align_coord_W.valueChanged.connect(self.align_mask_forming)
         self.ui.chB_align_show.stateChanged.connect(self.align_mask_forming)
         self.ui.chB_align_noFrame.stateChanged.connect(self.align_mask_remove_frame)
+        self.ui.chB_align_mirrorH.stateChanged.connect(self.align_mirror_h)
+        self.ui.chB_align_mirrorV.stateChanged.connect(self.align_mirror_v)
 
         self.ui.pushButton_2.clicked.connect(self.start_projection)
 
@@ -275,7 +277,7 @@ class App(QMainWindow):
     def align_mask_remove_frame(self):
         """делает чёрный фон маски полностью прозрачным для выравнивания"""
         if self.ui.chB_align_noFrame.isChecked():
-            pixmap = self.alignMaskOriginPixmap
+            pixmap = self.align_mask
             # Convert to QImage
             image = pixmap.toImage()
             # If not already with alpha, convert to format with alpha
@@ -320,6 +322,31 @@ class App(QMainWindow):
         h = self.ui.sB_align_coord_H.value() - (q_rect.height() // 2)
 
         self.alignMaskFormingPixmap.setPos(int(w), int(h))
+
+    def align_mirror_h(self):
+        al_image = self.alignMaskOriginPixmap.toImage()
+
+        if self.ui.chB_align_mirrorH.isChecked():
+            al_image. flip(Qt.Horizontal)
+        else:
+            al_image.flip(Qt.Horizontal)
+
+        self.alignMaskOriginPixmap = QPixmap.fromImage(al_image)
+
+        self.align_mask_forming()
+
+    def align_mirror_v(self):
+        al_image = self.alignMaskOriginPixmap.toImage()
+
+        if self.ui.chB_align_mirrorV.isChecked():
+            al_image. flip(Qt.Vertical)
+        else:
+            al_image.flip(Qt.Vertical)
+
+        self.alignMaskOriginPixmap = QPixmap.fromImage(al_image)
+
+        self.align_mask_forming()
+
 
     def validate_inputs(self):
         try:

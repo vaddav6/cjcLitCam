@@ -448,15 +448,15 @@ class Ui_MainWindow(object):
 
         self.formLayout_7.setWidget(6, QFormLayout.ItemRole.FieldRole, self.chB_align_noFrame)
 
-        self.chB_mask_mirrorV = QCheckBox(self.frame_3)
-        self.chB_mask_mirrorV.setObjectName(u"chB_mask_mirrorV")
+        self.chB_align_mirrorV = QCheckBox(self.frame_3)
+        self.chB_align_mirrorV.setObjectName(u"chB_align_mirrorV")
 
-        self.formLayout_7.setWidget(7, QFormLayout.ItemRole.LabelRole, self.chB_mask_mirrorV)
+        self.formLayout_7.setWidget(7, QFormLayout.ItemRole.LabelRole, self.chB_align_mirrorV)
 
-        self.chB_mask_mirrorH = QCheckBox(self.frame_3)
-        self.chB_mask_mirrorH.setObjectName(u"chB_mask_mirrorH")
+        self.chB_align_mirrorH = QCheckBox(self.frame_3)
+        self.chB_align_mirrorH.setObjectName(u"chB_align_mirrorH")
 
-        self.formLayout_7.setWidget(7, QFormLayout.ItemRole.FieldRole, self.chB_mask_mirrorH)
+        self.formLayout_7.setWidget(7, QFormLayout.ItemRole.FieldRole, self.chB_align_mirrorH)
 
 
         self.verticalLayout.addWidget(self.frame_3)
@@ -510,9 +510,9 @@ class Ui_MainWindow(object):
         self.chB_align_show.setText(QCoreApplication.translate("MainWindow", u"\u043f\u043e\u043a\u0430\u0437\u0430\u0442\u044c\n"
 "\u0448\u0430\u0431\u043b\u043e\u043d", None))
         self.chB_align_noFrame.setText(QCoreApplication.translate("MainWindow", u"\u0431\u0435\u0437 \u0440\u0430\u043c\u043a\u0438", None))
-        self.chB_mask_mirrorV.setText(QCoreApplication.translate("MainWindow", u"\u043e\u0442\u0440\u0430\u0437\u0438\u0442\u044c\n"
+        self.chB_align_mirrorV.setText(QCoreApplication.translate("MainWindow", u"\u043e\u0442\u0440\u0430\u0437\u0438\u0442\u044c\n"
 "\u0432\u0435\u0440\u0442\u0438\u043a\u0430\u043b\u044c\u043d\u043e", None))
-        self.chB_mask_mirrorH.setText(QCoreApplication.translate("MainWindow", u"\u043e\u0442\u0440\u0430\u0437\u0438\u0442\u044c\n"
+        self.chB_align_mirrorH.setText(QCoreApplication.translate("MainWindow", u"\u043e\u0442\u0440\u0430\u0437\u0438\u0442\u044c\n"
 "\u0433\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u043e", None))
     # retranslateUi
 
