@@ -204,8 +204,8 @@ class App(QMainWindow):
                 if self.mirrorH:
                     qimage.flip(Qt.Horizontal)
 
-                # pixmap = QPixmap.fromImage(qimage) # камера
-                pixmap = QPixmap("resor/photoMicroStruct_4k.jpg") # DEB img вместо камеры
+                pixmap = QPixmap.fromImage(qimage) # камера
+                # pixmap = QPixmap("resor/photoMicroStruct_4k.jpg") # DEB img вместо камеры
                 self.current_pixmap = pixmap.copy()
                 # Обновляем сцену
                 self.pixmap_item.setPixmap(pixmap)
@@ -435,7 +435,7 @@ class App(QMainWindow):
                 self.current_state = "display"
                 self.timerLitho.start(self.display_time)
 
-                total_time = self.total_cycles * (self.display_time + self.pause_time)
+                total_time = int(self.total_cycles * (self.display_time + self.pause_time) * 0.9) # 0.9 - костыль
                 remaining_time = self.remaining_cycles * (self.display_time + self.pause_time)
                 self.pBVal = 100 - int((remaining_time / total_time) * 100)
                 self.ui.litho_progress_prBar.setValue(self.pBVal)

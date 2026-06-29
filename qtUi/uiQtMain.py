@@ -18,31 +18,28 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox,
     QFormLayout, QFrame, QGraphicsView, QHBoxLayout,
     QLabel, QMainWindow, QProgressBar, QPushButton,
-    QSizePolicy, QSpinBox, QVBoxLayout, QWidget)
+    QScrollArea, QSizePolicy, QSpinBox, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1078, 908)
+        MainWindow.resize(1072, 895)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout_2 = QVBoxLayout(self.centralwidget)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.frame_2 = QFrame(self.centralwidget)
-        self.frame_2.setObjectName(u"frame_2")
-        self.frame_2.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout = QHBoxLayout(self.frame_2)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.frame_4 = QFrame(self.frame_2)
-        self.frame_4.setObjectName(u"frame_4")
-        self.frame_4.setMaximumSize(QSize(300, 16777215))
-        self.frame_4.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_4.setFrameShadow(QFrame.Shadow.Raised)
-        self.verticalLayout = QVBoxLayout(self.frame_4)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.frame = QFrame(self.frame_4)
+        self.horizontalLayout_2 = QHBoxLayout(self.centralwidget)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.scrollArea = QScrollArea(self.centralwidget)
+        self.scrollArea.setObjectName(u"scrollArea")
+        self.scrollArea.setMaximumSize(QSize(300, 16777215))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollAreaWidgetContents = QWidget()
+        self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 296, 873))
+        self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.frame = QFrame(self.scrollAreaWidgetContents)
         self.frame.setObjectName(u"frame")
         self.frame.setMaximumSize(QSize(16777215, 300))
         self.frame.setFrameShape(QFrame.Shape.StyledPanel)
@@ -70,9 +67,9 @@ class Ui_MainWindow(object):
         self.formLayout.setWidget(0, QFormLayout.ItemRole.LabelRole, self.l_camera)
 
 
-        self.verticalLayout.addWidget(self.frame)
+        self.verticalLayout_3.addWidget(self.frame)
 
-        self.frame_8 = QFrame(self.frame_4)
+        self.frame_8 = QFrame(self.scrollAreaWidgetContents)
         self.frame_8.setObjectName(u"frame_8")
         self.frame_8.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame_8.setFrameShadow(QFrame.Shadow.Raised)
@@ -108,9 +105,9 @@ class Ui_MainWindow(object):
         self.formLayout_5.setWidget(2, QFormLayout.ItemRole.SpanningRole, self.pB_saveCamera)
 
 
-        self.verticalLayout.addWidget(self.frame_8)
+        self.verticalLayout_3.addWidget(self.frame_8)
 
-        self.litho_frame = QFrame(self.frame_4)
+        self.litho_frame = QFrame(self.scrollAreaWidgetContents)
         self.litho_frame.setObjectName(u"litho_frame")
         self.litho_frame.setEnabled(False)
         self.litho_frame.setFrameShape(QFrame.Shape.StyledPanel)
@@ -354,14 +351,14 @@ class Ui_MainWindow(object):
         self.formLayout_2.setWidget(8, QFormLayout.ItemRole.FieldRole, self.litho_bright_sB)
 
 
-        self.verticalLayout.addWidget(self.litho_frame)
+        self.verticalLayout_3.addWidget(self.litho_frame)
 
-        self.pB_maskSelect = QPushButton(self.frame_4)
+        self.pB_maskSelect = QPushButton(self.scrollAreaWidgetContents)
         self.pB_maskSelect.setObjectName(u"pB_maskSelect")
 
-        self.verticalLayout.addWidget(self.pB_maskSelect)
+        self.verticalLayout_3.addWidget(self.pB_maskSelect)
 
-        self.frame_3 = QFrame(self.frame_4)
+        self.frame_3 = QFrame(self.scrollAreaWidgetContents)
         self.frame_3.setObjectName(u"frame_3")
         self.frame_3.setEnabled(False)
         self.frame_3.setFrameShape(QFrame.Shape.StyledPanel)
@@ -459,19 +456,17 @@ class Ui_MainWindow(object):
         self.formLayout_7.setWidget(7, QFormLayout.ItemRole.FieldRole, self.chB_align_mirrorH)
 
 
-        self.verticalLayout.addWidget(self.frame_3)
+        self.verticalLayout_3.addWidget(self.frame_3)
 
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.horizontalLayout.addWidget(self.frame_4)
+        self.horizontalLayout_2.addWidget(self.scrollArea)
 
-        self.graphicsView = QGraphicsView(self.frame_2)
+        self.graphicsView = QGraphicsView(self.centralwidget)
         self.graphicsView.setObjectName(u"graphicsView")
         self.graphicsView.setFrameShape(QFrame.Shape.NoFrame)
 
-        self.horizontalLayout.addWidget(self.graphicsView)
-
-
-        self.verticalLayout_2.addWidget(self.frame_2)
+        self.horizontalLayout_2.addWidget(self.graphicsView)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
