@@ -38,12 +38,12 @@ class Ui_Form(object):
         sizePolicy1.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
         self.label.setSizePolicy(sizePolicy1)
 
-        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
 
         self.pushButton = QPushButton(Form)
         self.pushButton.setObjectName(u"pushButton")
 
-        self.gridLayout.addWidget(self.pushButton, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.pushButton, 4, 0, 1, 1)
 
 
         self.retranslateUi(Form)
